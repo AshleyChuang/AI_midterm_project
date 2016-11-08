@@ -1,6 +1,6 @@
 int grader(board)
 {
-    int j_, i_, j£½, m;
+    int j_, i_, _j, m;
     for (i = 0, i < 15, i += 1)
     {
         for (j = 0, j < 15, j += 1)
@@ -11,7 +11,7 @@ int grader(board)
                 {
                     j_ = j + n;
     		    i_ = i + n;
-    		    j£½ = j - n;
+    		    _j = j - n;
     		    m = 4 - abs(n);
     		    if (j_ >= 0 and j_ <= 14 and board[i ][j_] != 99 and board[i ][j_] != 66)
     		    {
@@ -25,9 +25,9 @@ int grader(board)
     		    {
     			board[i_][ j ] += m;
     		    }
-    		    if (j£½ >= 0 and j£½ <= 14 and board[i_][j£½] != 99 and board[i_][j£½] != 66)
+    		    if (_j >= 0 and _j <= 14 and board[i_][_j] != 99 and board[i_][_j] != 66)
     		    {
-    			board[i_][ j£½] += m;
+    			board[i_][ _j] += m;
     		    }
     		}
     	    }
@@ -37,7 +37,7 @@ int grader(board)
     		{
                     j_ = j + n;
                     i_ = i + n;
-                    j£½ = j - n;
+                    _j = j - n;
                     m = 4 - abs(n);
     		    if (j_ >= 0 and j_ <= 14 and board[i ][j_] != 99 and board[i ][j_] != 66)
     		    {
@@ -51,9 +51,9 @@ int grader(board)
     		    {
     			board[i_][ j ] -= m;
                     }
-                    if (j£½ >= 0 and j£½ <= 14 and board[i_][j£½] != 99 and board[i_][j£½] != 66)
+                    if (_j >= 0 and _j <= 14 and board[i_][_j] != 99 and board[i_][_j] != 66)
     		    {
-                        board[i_][ j£½] -= m;
+                        board[i_][ _j] -= m;
     		    }
     		}
     	    }
