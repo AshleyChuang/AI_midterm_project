@@ -11,7 +11,7 @@
 class MCTS
 {
 public:
-    public Node Selection(Node current, Game game) {
+    Node Selection(Node current, Game game) {
         while(!game.isTerminal(current.state)){
             List<Action> validMoves = game.getValidMoves(current.state);
             if(validMoves.size() > current.children.size()) {
@@ -21,15 +21,14 @@ public:
         return current;
     }
     
-    public Node Expand(Node current, Game game){
+    Node Expand(Node current, Game game){
         
     }
     
-    public int Simulate(Node current, Game game) {
+    int Simulate(Node current, Game game) {
         
     }
-    
-    public BackPropagation(Node current) {
+    void BackPropagation(Node current) {
         
     }
 private:

@@ -10,6 +10,7 @@
 		ABB524EA1DD4B291001956BC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABB524E91DD4B291001956BC /* main.cpp */; };
 		ABB524F21DD4B2B6001956BC /* Game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABB524F01DD4B2B6001956BC /* Game.cpp */; };
 		ABB524F51DD4B2E7001956BC /* MCTS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABB524F31DD4B2E7001956BC /* MCTS.cpp */; };
+		ABB524F81DD4BD6A001956BC /* Node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = ABB524F61DD4BD6A001956BC /* Node.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,6 +32,8 @@
 		ABB524F11DD4B2B6001956BC /* Game.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Game.hpp; sourceTree = "<group>"; };
 		ABB524F31DD4B2E7001956BC /* MCTS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MCTS.cpp; sourceTree = "<group>"; };
 		ABB524F41DD4B2E7001956BC /* MCTS.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = MCTS.hpp; sourceTree = "<group>"; };
+		ABB524F61DD4BD6A001956BC /* Node.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Node.cpp; sourceTree = "<group>"; };
+		ABB524F71DD4BD6A001956BC /* Node.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Node.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +71,8 @@
 				ABB524F11DD4B2B6001956BC /* Game.hpp */,
 				ABB524F31DD4B2E7001956BC /* MCTS.cpp */,
 				ABB524F41DD4B2E7001956BC /* MCTS.hpp */,
+				ABB524F61DD4BD6A001956BC /* Node.cpp */,
+				ABB524F71DD4BD6A001956BC /* Node.hpp */,
 			);
 			path = AI_HW;
 			sourceTree = "<group>";
@@ -132,6 +137,7 @@
 				ABB524F51DD4B2E7001956BC /* MCTS.cpp in Sources */,
 				ABB524EA1DD4B291001956BC /* main.cpp in Sources */,
 				ABB524F21DD4B2B6001956BC /* Game.cpp in Sources */,
+				ABB524F81DD4BD6A001956BC /* Node.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,6 +264,7 @@
 				ABB524EF1DD4B291001956BC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
