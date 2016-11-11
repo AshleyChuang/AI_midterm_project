@@ -8,28 +8,72 @@
 
 #include "MCTS.hpp"
 
-class MCTS
+Node* MCTS::Selection(Node* current, Game* game)
 {
-public:
-    Node Selection(Node current, Game game) {
-        while(!game.isTerminal(current.state)){
-            List<Action> validMoves = game.getValidMoves(current.state);
-            if(validMoves.size() > current.children.size()) {
-                return Expand(current, game)
-            }
+    while(!game->isTerminal(current->state)){
+        list<int> validMoves = game->getValidMoves(current->state);
+        if(validMoves.size() > current->children.size()) {
+            return Expand(current, game);
         }
-        return current;
+    }
+    return current;
+}
+
+
+Node* MCTS::Expand(Node* current, Game* game)
+{
+    list<int> validMoves = game->getValidMoves(current->state);
+    
+    for(int i=0; i<validMoves.size(); i++) {
+        if(current->children.exist(validMoves[i])) continue;
+        
+        int playerActing = Opponent(current->PlayerTookAction);
+        Node *node = new Node(current, validMoves[i], playerActing, current->depth+1);
+        current->children.add(&node);
+        
+        game->mark(playerActing, validMoves[i]);
+        
+        return node;
+    }
+}
+
+int MCTS::Simulate(Node* current, Game* game)
+{
+    if(game->getWinner() == ...) {
+        // not good
+        return 0;
+    }
+    while(game->getWinner() == 0) {
+        //Random
+        list<int> moves = game>getValidMoves();
+        int move = moves[r.Next(0, moves.size())];
+        game->mark(player, move);
+        player = Opponent(player);
     }
     
-    Node Expand(Node current, Game game){
-        
-    }
+    if (game.getWinner() == startPlayer || game.GetWinner() == 3)
+        return 1;
     
-    int Simulate(Node current, Game game) {
-        
+    return 0;
+}
+
+void MCTS::BackPropagation(Node* current)
+{
+    do
+    {
+        current->visits++;
+        current->value += value;
+        current = current->parent;
     }
-    void BackPropagation(Node current) {
-        
-    }
-private:
-};
+    while (current != NULL);
+}
+
+Node MCTS::getBestChild()
+{
+    
+}
+
+int MCTS::getBestAction(Node *current, Game *game)
+{
+    
+}

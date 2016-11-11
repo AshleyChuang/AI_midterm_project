@@ -8,7 +8,7 @@
 
 #include "Node.hpp"
 
-Node::Node(Node parent, int action, int PlayerTookAction, int depth)
+Node::Node(Node* parent, int action, int PlayerTookAction, int depth)
 {
     this->parent = parent;
     this->action = action;

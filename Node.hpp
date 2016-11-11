@@ -21,7 +21,7 @@ using namespace std;
 class Node
 {
 public:
-    Node *parent;
+    Node *parent = NULL;
     list<Node> children;
     int value = 0;
     int visits = 0;
@@ -33,7 +33,7 @@ public:
     //Game specific
     int state[9];;
     
-    Node(Node parent, int action, int PlayerTookAction, int depth);
+    Node(Node* parent, int action, int PlayerTookAction, int depth);
     
     string ToString();
 };
