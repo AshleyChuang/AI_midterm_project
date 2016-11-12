@@ -8,7 +8,7 @@
 
 #include "Node.hpp"
 
-Node::Node(Node* parent, int action, int PlayerTookAction, int depth)
+Node::Node(Node* parent, coordinate action, int PlayerTookAction, int depth)
 {
     this->parent = parent;
     this->action = action;
@@ -20,6 +20,7 @@ string Node::ToString()
 {
     if (parent == NULL)
         return "Root Node";
-    
-    return "Action: " + action + " Vi/Va: " + visits + "/" + value + " (Took Action: p" + PlayerTookAction + ") depth: " + depth;
+    stringstream information;
+    information << "Action: [" << action.row << "," << action.column << "], wins/visits: " << wins << "/" << visits << ", Took action:  p" << PlayerTookAction << ", depth: " << depth;
+    return information.str();
 }

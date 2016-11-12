@@ -12,6 +12,7 @@
 #include <stdio.h>
 #include "Node.hpp"
 #include "Game.hpp"
+#include <math.h>
 #include <list>
 
 class MCTS
@@ -21,11 +22,13 @@ public:
     Node* Selection(Node* current, Game* game);
     Node* Expand(Node* current, Game* game);
     
-    int Simulate(Node* current, Game* game);
-    void BackPropagation(Node* current);
+    int Simulate(Node* current, Game* game, int player);
+    void BackPropagation(Node* current, int value);
     Node* getBestChild(Node* current, int Cp); // by UCT
     
-    int* getBestAction(Game* game, int player); // return a coordinate where is the best place to move.
+    coordinate getBestAction(Game* game, int player); // return a coordinate where is the best place to move.
+    
+    int opponent(int startPlayer);
 private:
 };
 
