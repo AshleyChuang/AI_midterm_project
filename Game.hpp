@@ -11,6 +11,10 @@
 
 #include <stdio.h>
 
+#define BLACK 1
+#define WHITE 2
+
+
 class Game
 {
     

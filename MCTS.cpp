@@ -15,6 +15,9 @@ Node* MCTS::Selection(Node* current, Game* game)
         if(validMoves.size() > current->children.size()) {
             return Expand(current, game);
         }
+        else {
+            current = getBestChild(current, 1.44);
+        }
     }
     return current;
 }
@@ -29,7 +32,7 @@ Node* MCTS::Expand(Node* current, Game* game)
         
         int playerActing = Opponent(current->PlayerTookAction);
         Node *node = new Node(current, validMoves[i], playerActing, current->depth+1);
-        current->children.add(&node);
+        current->children.add(node);
         
         game->mark(playerActing, validMoves[i]);
         
@@ -68,12 +71,13 @@ void MCTS::BackPropagation(Node* current)
     while (current != NULL);
 }
 
-Node MCTS::getBestChild()
+Node MCTS::getBestChild(Node* current, int Cp)
 {
     
 }
 
-int MCTS::getBestAction(Node *current, Game *game)
+int* MCTS::getBestAction(Game *game, int player)
 {
-    
+    int bestMove[2] = {0,0};
+    Node* root = new Node(NULL, player, , 0);
 }
