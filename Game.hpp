@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include <set>
 #define BLACK 1
 #define WHITE 2
 using namespace std;
@@ -212,8 +213,8 @@ int getValidMoves()
 class Game
 {
 public:
-    vector<coordinate> getValidMoves(const int* state, int player);
-    vector<coordinate> getValidMoves(int player);
+    set<coordinate> getValidMoves(const int* state, int player);
+    set<coordinate> getValidMoves(int player);
     bool isTerminal(int* state);
     int getWinner(); // 1 is BLACK, 2 is WHITE, 0 is "no winner"
     void mark(int player, coordinate move);
