@@ -13,16 +13,32 @@ Game::Game(){
     g_iPointLen = Length * Length;
     Point1.X = 0;
     Point1.Y = 0;
-    Point1.iFlag = AI_Number;
+    Point1.iFlag = white;
     Point2.X = 7;
     Point2.Y = 7;
-    Point2.iFlag = HUMAN;
+    Point2.iFlag = black;
     for( i=0; i <Length*Length; ++i )
         for(j=0;j<length;++j)
             chessboard[i][j] = BLANK;
 }
 
-void Game::MakePoint( Point * pPoint, int iGameFlag )
+int main()
+{
+    char k;
+    system("color E0");//设置颜色
+    do{
+        InitGame();
+        int player=1;
+        Game();
+        printf("Do you want a new turn?input y or n："); getchar(); scanf("%c",&k);
+        while(k!='y'&&k!='n'){ printf("INPUT ERROR!\n"); scanf("%c",&k); }
+        system("cls");
+    }while(k=='y');
+    printf("Thanks for using!\n");
+    return 0;
+}
+
+void Game:: MakePoint( Point * pPoint, int iGameFlag )
 {
     if( iGameFlag )
     {
@@ -42,9 +58,13 @@ void Game::MakePoint( Point * pPoint, int iGameFlag )
     system("cls");
     draw();
     if( iGameFlag == 0 )
-        printf("The AI_Numberputer place at %d %d\n", pPoint->X, pPoint->Y );
+        printf("The whiteputer place at %d %d\n", pPoint->X, pPoint->Y );
 }
 
+void mark(const int *board，int player，int cordinate_x，int cordinate_y)
+{
+    board[cordinate_x][cordinate_y]=player;
+}
 
 void Game::playGame()
 {                                
@@ -60,7 +80,7 @@ void Game::playGame()
     while( g_iPointLen )
     {
         MakePoint( &Point1, 1 );
-        if( Victory( &Point1 ) )
+        if( getWinner( chessboard,&Point1.X, &Point1.Y )==1 )
         
             printf("YOU WIN!\n");
             return;
@@ -70,34 +90,27 @@ void Game::playGame()
         if( choice == 1 )
 
         {
+            player=3-player;
 
             AI( &Point2.Y, &Point2.X );
 
             MakePoint( &Point2, 0 );
 
-            if( Victory( &Point2 ) )
+            if( getWinner(chessboard,&Point2.X, &Point2.Y)==2)
 
             {               /* 电脑赢 */
 
-                    printf( "THE AI_NumberPUTER WIN!\n" );
+                    printf( "THE whitePUTER WIN!\n" );
 
                     return;
 
                 }
             }
         }
-       else
-        {
-            MakePoint( &Point2, 1 );
-            if( Victory( &Point2 ) )
-            {
-                printf("THE Game DRAWS!!!!\n");
-                return;
-            }
-        }
     }
     printf("draw\n");
 }
+
 
 
 void Game::draw() /* 画棋盘 */
@@ -107,8 +120,8 @@ void Game::draw() /* 画棋盘 */
     for(j=0;j<15;j++)
         for(i=0;i<15;i++){
             if(chessboard[j][i]==BLANK) strcpy(p[j][i],"  \0");
-            if(chessboard[j][i]==HUMAN) strcpy(p[j][i],"●\0");
-            if(chessboard[j][i]==AI_Number) strcpy(p[j][i],"◎\0");
+            if(chessboard[j][i]==black) strcpy(p[j][i],"●\0");
+            if(chessboard[j][i]==white) strcpy(p[j][i],"◎\0");
         }
 
     printf("       A    B   C    D   E   F   G   H   I   J   K   L   M   N    O  \n");
@@ -130,18 +143,19 @@ void Game::draw() /* 画棋盘 */
 }
 
 
-int Game::Victory(int x,int y)
+int Game::getWinner(const int *board,int x,int y)
 {
+    board[x][y]=player;
     int i,w=1,mz=1,nz=1,z=1;
     for(i=1;i<5;i++)
     {
-        if(y+i<15&&chessboard[x][y+i]==player)
+        if(y+i<15&&board[x][y+i]==player)
             w++;
         else break;//下
     }
     for(i=1;i<5;i++)
     {
-        if(y-i>=0&&chessboard[x][y-i]==player)
+        if(y-i>=0&&board[x][y-i]==player)
             w++;
         else break;//上
     }
@@ -149,13 +163,13 @@ int Game::Victory(int x,int y)
         return player;
     for(i=1;i<5;i++)
     {
-        if(x+i<15&&chessboard[x+i][z]==player)
+        if(x+i<15&&board[x+i][z]==player)
             mz++;
         else break;//右
     }
     for(i=1;i<5;i++)
     {
-        if(x-i>=0&&chessboard[x-i][y]==player)
+        if(x-i>=0&&board[x-i][y]==player)
             mz++;
         else break;//左
     }
@@ -163,13 +177,13 @@ int Game::Victory(int x,int y)
             return player;
     for(i=1;i<5;i++)
     {
-        if(x+i<15&&y+i<15&&chessboard[x+i][y+i]==player)
+        if(x+i<15&&y+i<15&&board[x+i][y+i]==player)
             nz++;
         else break;//右下
     }
     for(i=1;i<5;i++)
     {
-        if(x-i>=0&&y-i>=0&&chessboard[x-i][y-i]==player)
+        if(x-i>=0&&y-i>=0&&board[x-i][y-i]==player)
             nz++;
         else break;//左上
     }
@@ -177,17 +191,26 @@ int Game::Victory(int x,int y)
         return player;
     for(i=1;i<5;i++)
     {
-        if(x+i<15&&y-i>=0&&chessboard[x+i][y-i]==player)
+        if(x+i<15&&y-i>=0&&board[x+i][y-i]==player)
             z++;
         else break;//右上
     }
     for(i=1;i<5;i++)
     {
-        if(x-i>=0&&y+i<15&&chessboard[x-i][y+i]==player)
+        if(x-i>=0&&y+i<15&&board[x-i][y+i]==player)
             z++;
         else break;//左下
     }
     if(z>=5)
         return player;
     return 0;
+}
+
+
+bool isTerminal(int *board)
+{
+    if getWinner()=0
+        return 1;//游戏尚未结束
+    else
+        return 0;//游戏结束
 }
