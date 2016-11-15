@@ -48,7 +48,7 @@ int MCTS::opponent(int startPlayer)
 Node* MCTS::Selection(Node* current, Game* game)
 {
     while(!game->isTerminal(&(current->state[0][0]))){
-        vector<coordinate> validMoves = game->getValidMoves(&(current->state[0][0]), current->player);
+        set<coordinate> validMoves = game->getValidMoves(&(current->state[0][0]), current->player);
         if(validMoves.size() > current->children.size()) { // current node has other coordinates to move, try them all!
             return Expand(current, game);
         }
@@ -65,7 +65,7 @@ Node* MCTS::Expand(Node* current, Game* game)
     vector<coordinate> validMoves = game->getValidMoves(&(current->state[0][0]), current->player); // get all the valid moves of current node
     
     for(int i=0; i<validMoves.size(); i++) {
-        vector<Node*>::const_iterator iterator;
+        set<Node*>::const_iterator iterator;
         bool action_exist = false;
         for (iterator = current->children.begin(); iterator!=current->children.end(); iterator++) {
             if (((*iterator)->action.row == validMoves[i].row) && ((*iterator)->action.column == validMoves[i].column)) {

@@ -8,8 +8,21 @@
 
 #include "Game.hpp"
 
+Game::Game(){
+    int i,j;
+    g_iPointLen = Length * Length;
+    Point1.X = 0;
+    Point1.Y = 0;
+    Point1.iFlag = AI_Number;
+    Point2.X = 7;
+    Point2.Y = 7;
+    Point2.iFlag = HUMAN;
+    for( i=0; i <Length*Length; ++i )
+        for(j=0;j<length;++j)
+            chessboard[i][j] = BLANK;
+}
 
-void MakePoint( Point * pPoint, int iGameFlag )
+void Game::MakePoint( Point * pPoint, int iGameFlag )
 {
     if( iGameFlag )
     {
@@ -33,7 +46,7 @@ void MakePoint( Point * pPoint, int iGameFlag )
 }
 
 
-void Game()
+void Game::playGame()
 {                                
     printf("\t\t\tPlease input the coordinate（ex:13 6）interval by bankBLANKce。\n\n\n");
     draw();
@@ -87,7 +100,7 @@ void Game()
 }
 
 
-void draw() /* 画棋盘 */
+void Game::draw() /* 画棋盘 */
 {
     int i,j;
     char p[15][15][4];
@@ -117,7 +130,7 @@ void draw() /* 画棋盘 */
 }
 
 
-int Victory(int x,int y)
+int Game::Victory(int x,int y)
 {
     int i,w=1,mz=1,nz=1,z=1;
     for(i=1;i<5;i++)
