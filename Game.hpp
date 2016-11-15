@@ -21,12 +21,11 @@ typedef struct coordinate
     int column;
 } coordinate;
 
-// Jonathan's starting point
+// This is the starting point of Jonathan's code.
 
 void grader()
 {
 	int i, j, n, m, j_, i_, _j;
-	
 	for (i = 0; i <= 14; i++)
 	{
 		for (j = 0; j <= 14; j++)
@@ -36,13 +35,10 @@ void grader()
 				for (n = -3; n <= 3; n++)
 				{
 					j_ = j + n;
-					
                     i_ = i + n;
-                    
                     _j = j - n;
-                    
                     m = 4 - abs(n);
-                    
+					
                     if (j_ >= 0 && j_ <= 14 && board[i ][j_] != 99 && board[i ][j_] != 66)
                     {
                     	board[i ][j_] += m;
