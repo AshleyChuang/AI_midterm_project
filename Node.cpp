@@ -8,12 +8,13 @@
 
 #include "Node.hpp"
 
-Node::Node(Node* parent, coordinate action, int PlayerTookAction, int depth)
+Node::Node(Node* parent, coordinate action, int PlayerTookAction, int depth, int* state)
 {
     this->parent = parent;
     this->action = action;
-    this->PlayerTookAction = (int)PlayerTookAction;
+    this->player = (int)PlayerTookAction;
     this->depth = depth;
+    std::copy(state, state + 15*15, this->state);
 }
 
 string Node::ToString()
@@ -21,6 +22,6 @@ string Node::ToString()
     if (parent == NULL)
         return "Root Node";
     stringstream information;
-    information << "Action: [" << action.row << "," << action.column << "], wins/visits: " << wins << "/" << visits << ", Took action:  p" << PlayerTookAction << ", depth: " << depth;
+    information << "Action: [" << action.row << "," << action.column << "], wins/visits: " << wins << "/" << visits << ", Took action:  p" << player << ", depth: " << depth;
     return information.str();
 }

@@ -26,7 +26,7 @@ Node* MCTS::getBestChild(Node* current, int Cp)
 
 coordinate MCTS::getBestAction(Game *game, int player)
 {
-    Node *root = new Node(NULL, *new coordinate, opponent(player), 0);
+    Node *root = new Node(NULL, *new coordinate, opponent(player), 0, &(game->chessboard[0][0]));
     
     for(int i=0; i<1000; i++) {
         Node *current = Selection(root, game);
@@ -44,11 +44,12 @@ int MCTS::opponent(int startPlayer)
     else
         return BLACK;
 }
+
 Node* MCTS::Selection(Node* current, Game* game)
 {
-    while(!game->isTerminal(current->state)){
-        vector<coordinate> validMoves = game->getValidMoves(current->state);
-        if(validMoves.size() > current->children.size()) {
+    while(!game->isTerminal(&(current->state[0][0]))){
+        vector<coordinate> validMoves = game->getValidMoves(&(current->state[0][0]), current->player);
+        if(validMoves.size() > current->children.size()) { // current node has other coordinates to move, try them all!
             return Expand(current, game);
         }
         else {
@@ -59,10 +60,9 @@ Node* MCTS::Selection(Node* current, Game* game)
     return current;
 }
 
-
 Node* MCTS::Expand(Node* current, Game* game)
 {
-    vector<coordinate> validMoves = game->getValidMoves(current->state);
+    vector<coordinate> validMoves = game->getValidMoves(&(current->state[0][0]), current->player); // get all the valid moves of current node
     
     for(int i=0; i<validMoves.size(); i++) {
         vector<Node*>::const_iterator iterator;
@@ -76,11 +76,11 @@ Node* MCTS::Expand(Node* current, Game* game)
         if (action_exist) {
             continue;
         }
-        int playerActing = opponent(current->PlayerTookAction);
-        Node *node = new Node(current, validMoves[i], playerActing, current->depth+1);
+        int playerActing = opponent(current->player);
+        Node *node = new Node(current, validMoves[i], playerActing, current->depth+1, &(current->state[0][0]));
         current->children.push_back(node);
         
-        game->mark(playerActing, validMoves[i]);
+        game->mark(&(node->state[0][0]), playerActing, validMoves[i]);
         
         return node;
     }

@@ -27,15 +27,14 @@ public:
     int wins = 0;
     int visits = 0;
     coordinate action;
-    int PlayerTookAction = 0;
+    int player = -1;
     int depth = 0;
     bool ignore = false;
     
     //Game specific
-    int *state; // [15][15]
+    int state[15][15] = {0}; // [15][15]
     
-    Node(Node* parent, coordinate action, int PlayerTookAction, int depth);
-    void exist(coordinate move);
+    Node(Node* parent, coordinate action, int player, int depth, int* state);
     string ToString();
 };
 
