@@ -8,21 +8,6 @@
 
 #include "Game.hpp"
 
-void InitGame(){
-    int i,j;
-    g_iPointLen = Length * Length;
-    Point1.X = 0;
-    Point1.Y = 0;
-    Point1.iFlag = AI_Number;
-    Point2.X = 7;
-    Point2.Y = 7;
-    Point2.iFlag = HUMAN;
-    for( i=0; i <Length*Length; ++i )
-        for(j=0;j<length;++j)
-            chessboard[i][j] = BLANK;
-}
-
-
 
 void MakePoint( Point * pPoint, int iGameFlag )
 {
