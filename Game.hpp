@@ -204,6 +204,12 @@ void multiplier()
 }
 
 int getValidMoves()
+{
+	grader(board);
+	multiplier(board);
+	converter(board);
+	// I'm still figuring how to return coordinates.
+}
 
 // Jonathan's ending point    
 
