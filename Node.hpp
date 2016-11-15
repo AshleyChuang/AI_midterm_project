@@ -33,8 +33,9 @@ public:
     
     //Game specific
     int state[15][15] = {0}; // [15][15]
+    int number_of_chess;
     
-    Node(Node* parent, coordinate action, int player, int depth, int* state);
+    Node(Node* parent, coordinate action, int player, int depth, int* state, int number_of_chess);
     string ToString();
 };
 

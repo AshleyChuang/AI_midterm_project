@@ -26,7 +26,7 @@ Node* MCTS::getBestChild(Node* current, int Cp)
 
 coordinate MCTS::getBestAction(Game *game, int player)
 {
-    Node *root = new Node(NULL, *new coordinate, opponent(player), 0, &(game->chessboard[0][0]));
+    Node *root = new Node(NULL, *new coordinate, opponent(player), 0, &(game->chessboard[0][0]), 225-game->g_iPointLen);
     
     for(int i=0; i<1000; i++) {
         Node *current = Selection(root, game);
@@ -39,10 +39,10 @@ coordinate MCTS::getBestAction(Game *game, int player)
 
 int MCTS::opponent(int startPlayer)
 {
-    if(startPlayer == BLACK)
-        return WHITE;
+    if(startPlayer == HUMAN)
+        return AI_Number;
     else
-        return BLACK;
+        return HUMAN;
 }
 
 Node* MCTS::Selection(Node* current, Game* game)
@@ -77,7 +77,7 @@ Node* MCTS::Expand(Node* current, Game* game)
             continue;
         }
         int playerActing = opponent(current->player);
-        Node *node = new Node(current, validMoves[i], playerActing, current->depth+1, &(current->state[0][0]));
+        Node *node = new Node(current, validMoves[i], playerActing, current->depth+1, &(current->state[0][0]), current->number_of_chess-1);
         current->children.push_back(node);
         
         game->mark(&(node->state[0][0]), playerActing, validMoves[i]);
@@ -89,24 +89,38 @@ Node* MCTS::Expand(Node* current, Game* game)
 
 int MCTS::Simulate(Node* current, Game* game, int startPlayer)
 {
-    if(game->getWinner() == opponent(startPlayer)) {
+    int* temp_board;
+    int number_of_chess = current->number_of_chess;
+    if (number_of_chess==0) {
+        return 1;
+    }
+    std::copy(current->state, current->state + 15*15, temp_board);
+    if(game->getWinner(temp_board, current->action) == opponent(startPlayer)) {
         // not good
         current->parent->wins = -100;
         return 0;
     }
     int player = opponent(startPlayer);
-
-    while(game->getWinner() == 0) {
+    coordinate move = current->action;
+    int winner = game->getWinner(temp_board, move);
+    while( winner == 0 && number_of_chess) {
         //Random
-        vector<coordinate> moves = game->getValidMoves();
-        coordinate move; // random
-        game->mark(player, move);
+        set<coordinate> moves = game->getValidMoves(temp_board, player);
+        move = moves.find(); // pick a coordinate randomly in moves_set
+        game->mark(temp_board, player, move);
+        player = opponent(player);
+        number_of_chess--;
+        winner = game->getWinner(temp_board, move);
     }
     
-    if (game->getWinner() == startPlayer || game->getWinner() == 0)
+    if (winner == startPlayer)
         return 1;
-    
-    return 0;
+    else if (winner == opponent(startPlayer)) {
+        return 0;
+    }
+    else { // TIE
+        return 1;
+    }
 }
 
 void MCTS::BackPropagation(Node* current, int value)

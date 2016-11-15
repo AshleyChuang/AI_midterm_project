@@ -8,13 +8,14 @@
 
 #include "Node.hpp"
 
-Node::Node(Node* parent, coordinate action, int PlayerTookAction, int depth, int* state)
+Node::Node(Node* parent, coordinate action, int PlayerTookAction, int depth, int* state, int number_of_chess)
 {
     this->parent = parent;
     this->action = action;
     this->player = (int)PlayerTookAction;
     this->depth = depth;
     std::copy(state, state + 15*15, this->state);
+    this->number_of_chess = number_of_chess;
 }
 
 string Node::ToString()

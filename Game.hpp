@@ -23,6 +23,7 @@
 # define BLANK 0//
 # define HUMAN 1
 # define AI_Number   2
+# define TIE 3
 /* 空位置设为0 ，玩家下的位置设为1 ，电脑下的位置设为2 */
 using namespace std;
 
@@ -234,10 +235,10 @@ public:
     set<coordinate> getValidMoves(const int* state, int player);
     set<coordinate> getValidMoves(int player);
     
-    bool isTerminal(int* state);
-    int getWinner(); // 1 is BLACK, 2 is WHITE, 0 is "no winner"
-    void mark(int player, coordinate move);
-    void mark(const int* board, int player, coordinate move);
+    bool isTerminal(int* board);
+    int getWinner(int* board, coordinate move); // 1 is BLACK, 2 is WHITE, 0 is "no winner", 3 is TIE
+    //void mark(int player, coordinate move);
+    void mark(int* board, int player, coordinate move);
     
     int Victory(int x,int y)
     void draw();
