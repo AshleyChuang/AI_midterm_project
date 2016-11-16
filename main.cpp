@@ -1,5 +1,8 @@
 #include <iostream>
 #include "Game.hpp"
+#include <vector>
+#include <map>
+
 
 int main() {
     char k;
@@ -13,6 +16,7 @@ int main() {
         system("cls");
     }while(k=='y');
     printf("Thanks for using!\n");
+    
     return 0;
 }
 

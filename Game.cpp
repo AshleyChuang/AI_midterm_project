@@ -1,14 +1,15 @@
 #include "Game.hpp"
 
 Game::Game(){
+    mcts = new MCTS;
     int i,j;
     g_iPointLen = Length * Length;
     Point1.X = 0;
     Point1.Y = 0;
-    Point1.iFlag = white;
+    Point1.iFlag = WHITE;
     Point2.X = 7;
     Point2.Y = 7;
-    Point2.iFlag = black;
+    Point2.iFlag = BLACK;
     for( i=0; i <Length*Length; ++i )
         for(j=0;j<length;++j)
             chessboard[i][j] = BLANK;
@@ -19,9 +20,13 @@ void Game:: MakePoint( Point * pPoint, int iGameFlag )
 {
     if( iGameFlag )
     {
+        char cor;
         printf("please place your coordinate\n ");
-        while( scanf( "%d%d", &pPoint->X, &pPoint->Y ) )
+        
+
+        while( scanf( "%d%c", &pPoint->X, &cor) )
         {
+            &pPoint->Y=cor-65;
             if( ( pPoint->X < 0 || pPoint->X >Length-1 ) || ( pPoint->Y < 0 || pPoint->Y >Length-1 ) )
                 printf( "WRONG coordinate!PLEASE INPUT AGAIN：");
             else if( chessboard[pPoint->X][pPoint->Y] )
@@ -35,17 +40,22 @@ void Game:: MakePoint( Point * pPoint, int iGameFlag )
     system("cls");
     draw();
     if( iGameFlag == 0 )
-        printf("The whiteputer place at %d %d\n", pPoint->X, pPoint->Y );
+    {
+        char coy;
+        coy=pPoint->Y+65;
+        printf("The blackputer place at %d%c\n", pPoint->X, coy );
+    }
 }
-
-void mark(const int *board，int player，int cordinate_x，int cordinate_y)
+void Game::mark(int (*board)[Length], int player, coordinate move)
 {
-    board[cordinate_x][cordinate_y]=player;
+    int cordinate_x = move.row;
+    int cordinate_y = move.column;
+    board[cordinate_x][cordinate_y] = player;
 }
 
 void Game::playGame()
 {                                
-    printf("\t\t\tPlease input the coordinate（ex:13 6）interval by bankBLANKce。\n\n\n");
+    printf("\t\t\tPlease input the coordinate（ex:13H）\n\n\n");
     draw();
     printf("First step please input 1，Second step please input2：");
     while( scanf( "%d", &choice ), choice!=1 && choice!=2 )
@@ -88,7 +98,12 @@ void Game::playGame()
     printf("draw\n");
 }
 
-
+void Game::AI(int* y, int* x)
+{
+    coordinate move = mcts->getBestAction(this, WHITE);
+    *y = move.column;
+    *x = move.row;
+}
 
 void Game::draw() /* 画棋盘 */
 {
@@ -101,7 +116,7 @@ void Game::draw() /* 画棋盘 */
             if(chessboard[j][i]==white) strcpy(p[j][i],"◎\0");
         }
 
-    printf("       A    B   C    D   E   F   G   H   I   J   K   L   M   N    O  \n");
+     printf("         A   B   C   D   E   F   G   H   I   J   K   L   M   N   0  \n");
 
     printf("       ┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐\n");
 
@@ -116,12 +131,15 @@ void Game::draw() /* 画棋盘 */
     printf("     14│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│0\n",p[14][0],p[14][1],p[14][2],p[14][3],p[14][4],p[14][5],p[14][6],p[14][7],p[14][8],p[14][9],p[14][10],p[14][11],p[14][12],p[14][13],p[14][14]);
 
     printf("       └─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┘\n");
+    printf("         A   B   C   D   E   F   G   H   I   J   K   L   M   N   0  \n");
 
 }
 
 
-int Game::getWinner(const int *board,int x,int y)
+int Game::getWinner(const int (*board)[Length],coordinate coor)
 {
+    int x = coor.row;
+    int y = coor.column;
     board[x][y]=player;
     int i,w=1,mz=1,nz=1,z=1;
     for(i=1;i<5;i++)
@@ -184,12 +202,12 @@ int Game::getWinner(const int *board,int x,int y)
 }
 
 
-bool isTerminal(int *board)
+bool Game::isTerminal(int (*board)[Length], coordinate coor)
 {
-    if getWinner()=0
-        return 1;//游戏尚未结束
+    if getWinner(board, coor)=0
+        return true;//游戏尚未结束
     else
-        return 0;//游戏结束
+        return false;//游戏结束
 }
 // This is the starting point of Jonathan's code.
 
@@ -485,5 +503,14 @@ void Game::getValidMoves(int player)
 
     multiplier();
 
+<<<<<<< HEAD
     converter(); // output: coordinates
 }
+=======
+    printer();
+
+    // converter();
+
+    return 0;
+}
+>>>>>>> origin/master
