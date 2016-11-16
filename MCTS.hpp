@@ -9,11 +9,8 @@
 #ifndef MCTS_hpp
 #define MCTS_hpp
 
-#include <stdio.h>
 #include "Node.hpp"
-#include "Game.hpp"
 #include <math.h>
-#include <list>
 
 using namespace std;
 
