@@ -1,7 +1,7 @@
 #include "Game.hpp"
 
 Game::Game(){
-    //mcts = new MCTS();
+    mcts = new MCTS();
     int i,j;
     g_iPointLen = Length * Length;
     Point1.X = 0;
@@ -45,12 +45,6 @@ void Game:: MakePoint( Point * pPoint, int iGameFlag )
         coy=pPoint->Y+65;
         printf("The blackputer place at %d%c\n", pPoint->X, coy );
     }
-}
-void Game::mark(int (*board)[Length], int player, coordinate move)
-{
-    int cordinate_x = move.row;
-    int cordinate_y = move.column;
-    board[cordinate_x][cordinate_y] = player;
 }
 
 
@@ -104,11 +98,10 @@ void Game::playGame()
 
 void Game::AI(int* y, int* x)
 {
-    /*
-    coordinate move = mcts->getBestAction(this, WHITE);
+    
+    coordinate move = mcts->getBestAction(this->chessboard, WHITE, this->g_iPointLen);
     *y = move.column;
     *x = move.row;
-     */
     *y = 1;
     *x= 10;
 }
@@ -143,12 +136,11 @@ void Game::draw() /* 画棋盘 */
     
 }
 
-
 int Game::getWinner(int (*board)[Length],coordinate coor)
 {
     int x = coor.row;
     int y = coor.column;
-    player = board[x][y];
+    int player = board[x][y];
     int i,w=1,mz=1,nz=1,z=1;
     for(i=1;i<5;i++)
     {
@@ -207,318 +199,4 @@ int Game::getWinner(int (*board)[Length],coordinate coor)
     if(z>=5)
         return player;
     return 0;
-}
-
-
-bool Game::isTerminal(int (*board)[Length], coordinate coor)
-{
-    if(getWinner(board, coor)==0)
-        return true;//游戏尚未结束
-    else
-        return false;//游戏结束
-}
-// This is the starting point of Jonathan's code.
-
-int temp_board[Length][Length];
-
-void Game::manager(int (*board)[Length], int player)
-{
-    int i, j;
-    std::copy(&temp_board[0][0], &temp_board[0][0] + Length*Length, &board[0][0]);
-    
-    if (player == 1) // black, AI
-    {
-        for (i = 0; i <= 14; i++)
-        {
-            for (j = 0; j <= 14; j++)
-            {
-                if (temp_board[i][j] == 2)
-                {
-                    temp_board[i][j] = 99;
-                }
-                else if (temp_board[i][j] == 1)
-                {
-                    temp_board[i][j] = 88;
-                }
-            }
-        }
-    }
-    else if (player == 2)
-    {
-        for (i = 0; i <= 14; i++)
-        {
-            for (j = 0; j <= 14; j++)
-            {
-                if (temp_board[i][j] == 1)
-                {
-                    temp_board[i][j] = 99;
-                }
-                else if (temp_board[i][j] == 2)
-                {
-                    temp_board[i][j] = 88;
-                }
-            }
-        }
-    }
-}
-
-void Game::grader()
-{
-    int i, j, n, m, j_, i_, _j;
-    
-    for (i = 0; i <= 14; i++)
-    {
-        for (j = 0; j <= 14; j++)
-        {
-            if (temp_board[i][j] == 99)
-            {
-                for (n = -3; n <= 3; n++)
-                {
-                    j_ = j + n;
-                    
-                    i_ = i + n;
-                    
-                    _j = j - n;
-                    
-                    m = 4 - abs(n);
-                    if (j_ >= 0 and j_ <= 14 and temp_board[i ][j_] < 88)
-                    {
-                        temp_board[i ][j_] += m;
-                    }
-                    if (i_ >= 0 and i_ <= 14 and temp_board[i_][j ] < 88)
-                    {
-                        temp_board[i_][j ] += m;
-                    }
-                    if (i_ >= 0 and i_ <= 14 and j_ >= 0 and j_ <= 14 and temp_board[i_][j_] < 88)
-                    {
-                        temp_board[i_][j_] += m;
-                    }
-                    if (i_ >= 0 and i_ <= 14 and _j >= 0 and _j <= 14 and temp_board[i_][_j] < 88)
-                    {
-                        temp_board[i_][_j] += m;
-                    }
-                }
-            }
-        }
-    }
-}
-
-void Game::multiplier()
-{
-    int c = 0;
-    
-    int i, j, m, n;
-    
-    for (i = 0; i <= 14; i++) // →
-    {
-        for (j = 0; j <= 14; j++)
-        {
-            if (temp_board[i][j] == 99)
-            {
-                c++;
-            }
-            else if (c != 0)
-            {
-                if (j - 1 - c >= 0 and temp_board[i][j - 1 - c] != 88)
-                {
-                    temp_board[i][j - 1 - c] *= c;
-                }
-                if (j < 15 and temp_board[i][j] != 88)
-                {
-                    temp_board[i][j] *= c;
-                }
-                c = 0;
-            }
-        }
-        if (c != 0 and temp_board[i][j - c - 1] != 88)
-        {
-            temp_board[i][j - c - 1] *= c;
-        }
-        c = 0;
-    }
-    
-    for (j = 0; j <= 14; j++) // ↓
-    {
-        for (i = 0; i <= 14; i++)
-        {
-            if (temp_board[i][j] == 99)
-            {
-                c++;
-            }
-            else if (c != 0)
-            {
-                if (i - 1 - c >= 0 and temp_board[i - 1 - c][j] != 88)
-                {
-                    temp_board[i - 1 - c][j] *= c;
-                }
-                if (i < 15 and temp_board[i][j] != 88)
-                {
-                    temp_board[i][j] *= c;
-                }
-                c = 0;
-            }
-        }
-        if (c != 0 and temp_board[i - c - 1][j] != 88)
-        {
-            temp_board[i - c - 1][j] *= c;
-        }
-        c = 0;
-    }
-    
-    for (m = 0; m <= 13; m++) // ↘
-    {
-        for (n = 0; n <= 14 - m; n++)
-        {
-            if (temp_board[m + n][n] == 99)
-            {
-                c++;
-            }
-            else if (c != 0)
-            {
-                if (m + n - 1 - c >= 0 and n - 1 - c >= 0 and temp_board[m + n - 1 - c][n - 1 - c] != 88)
-                {
-                    temp_board[m + n - 1 - c][n - 1 - c] *= c;
-                }
-                if (m + n < 15 and n < 15 and temp_board[m + n][n] != 88)
-                {
-                    temp_board[m + n][n] *= c;
-                }
-                c = 0;
-            }
-        }
-        if (c != 0 and temp_board[m + n - c - 1][n - c - 1] != 88)
-        {
-            temp_board[m + n - c - 1][n - c - 1] *= c;
-        }
-        c = 0;
-    }
-    
-    for (m = 1; m <= 13; m++) // ↘
-    {
-        for (n = 0; n <= 14 - m; n++)
-        {
-            if (temp_board[n][m + n] == 99)
-            {
-                c++;
-            }
-            else if (c != 0)
-            {
-                if (n - 1 - c >= 0 and m + n - 1 - c >= 0 and temp_board[n - 1 - c][m + n - 1 - c] != 88)
-                {
-                    temp_board[n - 1 - c][m + n - 1 - c] *= c;
-                }
-                if (n < 15 and m + n < 15 and temp_board[n][m + n] != 88)
-                {
-                    temp_board[n][m + n] *= c;
-                }
-                c = 0;
-            }
-        }
-        if (c != 0 and temp_board[n - c - 1][m + n - c - 1] != 88)
-        {
-            temp_board[n - c - 1][m + n - c - 1] *= c;
-        }
-        c = 0;
-    }
-    
-    for (m = 0; m <= 13; m++) // ↗
-    {
-        for (n = 0; n <= 14 - m; n++)
-        {
-            if (temp_board[14 - n][m + n] == 99)
-            {
-                c++;
-            }
-            else if (c != 0)
-            {
-                if (14 - n + 1 + c < 15 and m + n - 1 - c >= 0 and temp_board[14 - n + 1 + c][m + n - 1 - c] != 88)
-                {
-                    temp_board[14 - n + 1 + c][m + n - 1 - c] *= c;
-                }
-                if (14 - n >= 0 and m + n < 15 and temp_board[14 - n][m + n] != 88)
-                {
-                    temp_board[14 - n][m + n] *= c;
-                }
-                c = 0;
-            }
-        }
-        if (c != 0 and temp_board[14 - n + c + 1][m + n - c - 1] != 88)
-        {
-            temp_board[14 - n + c + 1][m + n - c - 1] *= c;
-        }
-        c = 0;
-    }
-    
-    for (m = 1; m <= 13; m++) // ↗
-    {
-        for (n = 0; n <= 14 - m; n++)
-        {
-            if (temp_board[14 - m - n][n] == 99)
-            {
-                c++;
-            }
-            else if (c != 0)
-            {
-                if (14 - m - n + 1 + c < 15 and n - 1 - c >= 0 and temp_board[14 - m - n + 1 + c][n - 1 - c] != 88)
-                {
-                    temp_board[14 - m - n + 1 + c][n - 1 - c] *= c;
-                }
-                if (14 - m - n >= 0 and n < 15 and temp_board[14 - m - n][n] != 88)
-                {
-                    temp_board[14 - m - n][n] *= c;
-                }
-                c = 0;
-            }
-        }
-        if (c != 0 and temp_board[14 - m - n + c + 1][n - c - 1] != 88)
-        {
-            temp_board[14 - m - n + c + 1][n - c - 1] *= c;
-        }
-        c = 0;
-    }
-}
-
-
-set<coordinate> Game::converter()
-{
-    set<coordinate> coordinates;
-
-    int i, j, p = 3;
-    
-    for (i = 0; i <= 14; i++)
-    {
-        for (j = 0; j <= 14; j++)
-        {
-            if (temp_board[i][j] > 3)
-            {
-                p = temp_board[i][j];
-            }
-        }
-    }
-    for (i = 0; i <= 14; i++)
-    {
-        for (j = 0; j <= 14; j++)
-        {
-            if (temp_board[i][j] == p)
-            {
-                coordinate a;
-
-                a.row = i;
-
-                a.column = j;
-
-                coordinates.insert(a);
-            }
-        }
-    }
-    return coordinates;
-}
-
-set<coordinate> Game::getValidMoves(int (*state)[Length], int player)
-{
-    manager(state, player);
-    grader();
-    multiplier();
-    
-    return converter();
 }

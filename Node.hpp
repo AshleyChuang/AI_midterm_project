@@ -12,11 +12,21 @@
 // define all the possible action below
 //
 //
+//#include "Coordinate.hpp"
 #include <stdio.h>
 #include <string>
 #include <vector>
 #include <sstream>
 using namespace std;
+typedef struct coordinate
+{
+    int row;
+    int column;
+} coordinate;
+
+bool operator<(coordinate const& x, coordinate const& y){
+    return (x.row < y.row)&&(x.column < y.column);
+}
 
 class Node
 {
