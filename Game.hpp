@@ -61,6 +61,10 @@ public:
     void MakePoint( Point * pPoint, int iGameFlag );
     void AI(int* y, int* x);
     
+    void manager(const int (*board)[Length], int player);
+    void grader();
+    void multiplier();
+    set<coordinate> converter();
     
     int chessboard[Length][Length];
     int g_iPointLen;

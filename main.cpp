@@ -9,7 +9,6 @@ int main() {
     system("color E0");//设置颜色
     do{
         Game *game = new Game();
-        int player=1;
         game->playGame();
         printf("Do you want a new turn?input y or n："); getchar(); scanf("%c",&k);
         while(k!='y'&&k!='n'){ printf("INPUT ERROR!\n"); scanf("%c",&k); }

@@ -224,36 +224,14 @@ bool Game::isTerminal(int (*board)[Length], coordinate coor)
 }
 
 // This is the starting point of Jonathan's code.
+int temp_board[Length][Length];
 
-/*
- #include <stdlib.h>
- #include <map>
- #include <vector>
- using namespace std;
- 
- 
- int board[15][15] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
- {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
- */
-
-int manager(int x)
+void Game::manager(const int (*board)[Length], int player)
 {
     int i, j;
+    std::copy(board, board + Length*Length, temp_board);
     
-    if (x == 1) // black, AI
+    if (player == 1) // black, AI
     {
         for (i = 0; i <= 14; i++)
         {
@@ -261,36 +239,35 @@ int manager(int x)
             {
                 if (board[i][j] == 2)
                 {
-                    board[i][j] = 99;
+                    temp_board[i][j] = 99;
                 }
-                else if (board[i][j] == 1)
+                else if (temp_board[i][j] == 1)
                 {
-                    board[i][j] = 88;
+                    temp_board[i][j] = 88;
                 }
             }
         }
     }
-    else if (x == 2)
+    else if (player == 2)
     {
         for (i = 0; i <= 14; i++)
         {
             for (j = 0; j <= 14; j++)
             {
-                if (board[i][j] == 1)
+                if (temp_board[i][j] == 1)
                 {
-                    board[i][j] = 99;
+                    temp_board[i][j] = 99;
                 }
-                else if (board[i][j] == 2)
+                else if (temp_board[i][j] == 2)
                 {
-                    board[i][j] = 88;
+                    temp_board[i][j] = 88;
                 }
             }
         }
     }
-    return 0;
 }
 
-void grader()
+void Game::grader()
 {
     int i, j, n, m, j_, i_, _j;
     
@@ -298,7 +275,7 @@ void grader()
     {
         for (j = 0; j <= 14; j++)
         {
-            if (board[i][j] == 99)
+            if (temp_board[i][j] == 99)
             {
                 for (n = -3; n <= 3; n++)
                 {
@@ -310,21 +287,21 @@ void grader()
                     
                     m = 4 - abs(n);
                     
-                    if (j_ >= 0 and j_ <= 14 and board[i ][j_] < 88)
+                    if (j_ >= 0 and j_ <= 14 and temp_board[i ][j_] < 88)
                     {
-                        board[i ][j_] += m;
+                        temp_board[i ][j_] += m;
                     }
-                    if (i_ >= 0 and i_ <= 14 and board[i_][j ] < 88)
+                    if (i_ >= 0 and i_ <= 14 and temp_board[i_][j ] < 88)
                     {
-                        board[i_][j ] += m;
+                        temp_board[i_][j ] += m;
                     }
-                    if (i_ >= 0 and i_ <= 14 and j_ >= 0 and j_ <= 14 and board[i_][j_] < 88)
+                    if (i_ >= 0 and i_ <= 14 and j_ >= 0 and j_ <= 14 and temp_board[i_][j_] < 88)
                     {
-                        board[i_][j_] += m;
+                        temp_board[i_][j_] += m;
                     }
-                    if (i_ >= 0 and i_ <= 14 and _j >= 0 and _j <= 14 and board[i_][_j] < 88)
+                    if (i_ >= 0 and i_ <= 14 and _j >= 0 and _j <= 14 and temp_board[i_][_j] < 88)
                     {
-                        board[i_][_j] += m;
+                        temp_board[i_][_j] += m;
                     }
                 }
             }
@@ -332,7 +309,7 @@ void grader()
     }
 }
 
-void multiplier()
+void Game::multiplier()
 {
     int c = 0;
     
@@ -342,26 +319,26 @@ void multiplier()
     {
         for (j = 0; j <= 14; j++)
         {
-            if (board[i][j] == 99)
+            if (temp_board[i][j] == 99)
             {
                 c++;
             }
             else if (c != 0)
             {
-                if (j - 1 - c >= 0 and board[i][j - 1 - c] != 88)
+                if (j - 1 - c >= 0 and temp_board[i][j - 1 - c] != 88)
                 {
-                    board[i][j - 1 - c] *= c;
+                    temp_board[i][j - 1 - c] *= c;
                 }
-                if (j < 15 and board[i][j] != 88)
+                if (j < 15 and temp_board[i][j] != 88)
                 {
-                    board[i][j] *= c;
+                    temp_board[i][j] *= c;
                 }
                 c = 0;
             }
         }
-        if (c != 0 and board[i][j - c - 1] != 88)
+        if (c != 0 and temp_board[i][j - c - 1] != 88)
         {
-            board[i][j - c - 1] *= c;
+            temp_board[i][j - c - 1] *= c;
         }
         c = 0;
     }
@@ -370,26 +347,26 @@ void multiplier()
     {
         for (i = 0; i <= 14; i++)
         {
-            if (board[i][j] == 99)
+            if (temp_board[i][j] == 99)
             {
                 c++;
             }
             else if (c != 0)
             {
-                if (i - 1 - c >= 0 and board[i - 1 - c][j] != 88)
+                if (i - 1 - c >= 0 and temp_board[i - 1 - c][j] != 88)
                 {
-                    board[i - 1 - c][j] *= c;
+                    temp_board[i - 1 - c][j] *= c;
                 }
-                if (i < 15 and board[i][j] != 88)
+                if (i < 15 and temp_board[i][j] != 88)
                 {
-                    board[i][j] *= c;
+                    temp_board[i][j] *= c;
                 }
                 c = 0;
             }
         }
-        if (c != 0 and board[i - c - 1][j] != 88)
+        if (c != 0 and temp_board[i - c - 1][j] != 88)
         {
-            board[i - c - 1][j] *= c;
+            temp_board[i - c - 1][j] *= c;
         }
         c = 0;
     }
@@ -398,26 +375,26 @@ void multiplier()
     {
         for (n = 0; n <= 14 - m; n++)
         {
-            if (board[m + n][n] == 99)
+            if (temp_board[m + n][n] == 99)
             {
                 c++;
             }
             else if (c != 0)
             {
-                if (m + n - 1 - c >= 0 and n - 1 - c >= 0 and board[m + n - 1 - c][n - 1 - c] != 88)
+                if (m + n - 1 - c >= 0 and n - 1 - c >= 0 and temp_board[m + n - 1 - c][n - 1 - c] != 88)
                 {
-                    board[m + n - 1 - c][n - 1 - c] *= c;
+                    temp_board[m + n - 1 - c][n - 1 - c] *= c;
                 }
-                if (m + n < 15 and n < 15 and board[m + n][n] != 88)
+                if (m + n < 15 and n < 15 and temp_board[m + n][n] != 88)
                 {
-                    board[m + n][n] *= c;
+                    temp_board[m + n][n] *= c;
                 }
                 c = 0;
             }
         }
-        if (c != 0 and board[m + n - c - 1][n - c - 1] != 88)
+        if (c != 0 and temp_board[m + n - c - 1][n - c - 1] != 88)
         {
-            board[m + n - c - 1][n - c - 1] *= c;
+            temp_board[m + n - c - 1][n - c - 1] *= c;
         }
         c = 0;
     }
@@ -426,26 +403,26 @@ void multiplier()
     {
         for (n = 0; n <= 14 - m; n++)
         {
-            if (board[n][m + n] == 99)
+            if (temp_board[n][m + n] == 99)
             {
                 c++;
             }
             else if (c != 0)
             {
-                if (n - 1 - c >= 0 and m + n - 1 - c >= 0 and board[n - 1 - c][m + n - 1 - c] != 88)
+                if (n - 1 - c >= 0 and m + n - 1 - c >= 0 and temp_board[n - 1 - c][m + n - 1 - c] != 88)
                 {
-                    board[n - 1 - c][m + n - 1 - c] *= c;
+                    temp_board[n - 1 - c][m + n - 1 - c] *= c;
                 }
-                if (n < 15 and m + n < 15 and board[n][m + n] != 88)
+                if (n < 15 and m + n < 15 and temp_board[n][m + n] != 88)
                 {
-                    board[n][m + n] *= c;
+                    temp_board[n][m + n] *= c;
                 }
                 c = 0;
             }
         }
-        if (c != 0 and board[n - c - 1][m + n - c - 1] != 88)
+        if (c != 0 and temp_board[n - c - 1][m + n - c - 1] != 88)
         {
-            board[n - c - 1][m + n - c - 1] *= c;
+            temp_board[n - c - 1][m + n - c - 1] *= c;
         }
         c = 0;
     }
@@ -454,26 +431,26 @@ void multiplier()
     {
         for (n = 0; n <= 14 - m; n++)
         {
-            if (board[14 - n][m + n] == 99)
+            if (temp_board[14 - n][m + n] == 99)
             {
                 c++;
             }
             else if (c != 0)
             {
-                if (14 - n + 1 + c < 15 and m + n - 1 - c >= 0 and board[14 - n + 1 + c][m + n - 1 - c] != 88)
+                if (14 - n + 1 + c < 15 and m + n - 1 - c >= 0 and temp_board[14 - n + 1 + c][m + n - 1 - c] != 88)
                 {
-                    board[14 - n + 1 + c][m + n - 1 - c] *= c;
+                    temp_board[14 - n + 1 + c][m + n - 1 - c] *= c;
                 }
-                if (14 - n >= 0 and m + n < 15 and board[14 - n][m + n] != 88)
+                if (14 - n >= 0 and m + n < 15 and temp_board[14 - n][m + n] != 88)
                 {
-                    board[14 - n][m + n] *= c;
+                    temp_board[14 - n][m + n] *= c;
                 }
                 c = 0;
             }
         }
-        if (c != 0 and board[14 - n + c + 1][m + n - c - 1] != 88)
+        if (c != 0 and temp_board[14 - n + c + 1][m + n - c - 1] != 88)
         {
-            board[14 - n + c + 1][m + n - c - 1] *= c;
+            temp_board[14 - n + c + 1][m + n - c - 1] *= c;
         }
         c = 0;
     }
@@ -482,95 +459,63 @@ void multiplier()
     {
         for (n = 0; n <= 14 - m; n++)
         {
-            if (board[14 - m - n][n] == 99)
+            if (temp_board[14 - m - n][n] == 99)
             {
                 c++;
             }
             else if (c != 0)
             {
-                if (14 - m - n + 1 + c < 15 and n - 1 - c >= 0 and board[14 - m - n + 1 + c][n - 1 - c] != 88)
+                if (14 - m - n + 1 + c < 15 and n - 1 - c >= 0 and temp_board[14 - m - n + 1 + c][n - 1 - c] != 88)
                 {
-                    board[14 - m - n + 1 + c][n - 1 - c] *= c;
+                    temp_board[14 - m - n + 1 + c][n - 1 - c] *= c;
                 }
-                if (14 - m - n >= 0 and n < 15 and board[14 - m - n][n] != 88)
+                if (14 - m - n >= 0 and n < 15 and temp_board[14 - m - n][n] != 88)
                 {
-                    board[14 - m - n][n] *= c;
+                    temp_board[14 - m - n][n] *= c;
                 }
                 c = 0;
             }
         }
-        if (c != 0 and board[14 - m - n + c + 1][n - c - 1] != 88)
+        if (c != 0 and temp_board[14 - m - n + c + 1][n - c - 1] != 88)
         {
-            board[14 - m - n + c + 1][n - c - 1] *= c;
+            temp_board[14 - m - n + c + 1][n - c - 1] *= c;
         }
         c = 0;
     }
 }
 
-map<int, vector<tuple<int, int>>> sets;
-
-// under construction ......
-void converter()
+set<coordinate> Game::converter()
 {
+    set<coordinate> coordinates;
+    
     int i, j;
     
     for (i = 0; i <= 14; i++)
     {
         for (j = 0; j <= 14; j++)
         {
-            if (board[i][j] != 0)
+            if (temp_board[i][j] >= 5)
             {
-                if (sets.find(board[i][j]) == sets.begin())
-                {
-                    sets[board[i][j]].push_back(make_tuple(i, j));
-                }
-                else
-                {
-                    // sets[board[i][j]] = {(i, j)};
-                }
+                coordinate a;
+                
+                a.row = i;
+                
+                a.column = j;
+                
+                coordinates.insert(a);
             }
         }
     }
+    return coordinates;
 }
 
-/*
- #include <iostream>
- 
- void printer()
- {
- int i, j;
- 
- for (i = 0; i <= 14; i++)
- {
- for (j = 0; j <= 14; j++)
- {
- cout << board[i][j];
- 
- if (board[i][j] / 10 >= 1)
- {
- cout << " ";
- }
- else
- {
- cout << "  ";
- }
- }
- cout << '\n';
- }
- }
- */
-
-int getValidMoves()
+set<coordinate> Game::getValidMoves(const int (*state)[Length], int player)
 {
-    manager(1);
+    manager(state, player);
     
     grader();
     
     multiplier();
     
-    printer();
-    
-    // converter();
-    
-    return 0;
+    return converter();
 }
