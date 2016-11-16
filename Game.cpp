@@ -1,4 +1,3 @@
-#include "Game.hpp"
 #include "MCTS.hpp"
 
 Game::Game(){
@@ -105,9 +104,13 @@ void Game::playGame()
 
 void Game::AI(int* y, int* x)
 {
+    /*
     coordinate move = mcts->getBestAction(this, WHITE);
     *y = move.column;
     *x = move.row;
+     */
+    *y = 1;
+    *x= 10;
 }
 
 void Game::draw() /* 画棋盘 */

@@ -26,7 +26,7 @@ Node* MCTS::getBestChild(Node* current, int Cp)
 
 coordinate MCTS::getBestAction(Game *game, int player)
 {
-    Node *root = new Node(NULL, *new coordinate, opponent(player), 0, game->chessboard, 225-game->g_iPointLen);
+    Node *root = new Node(NULL, *new coordinate, opponent(player), 0, game->chessboard, Length*Length-game->g_iPointLen);
     
     for(int i=0; i<1000; i++) {
         Node *current = Selection(root, game);

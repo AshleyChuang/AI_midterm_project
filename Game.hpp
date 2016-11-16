@@ -10,7 +10,6 @@
 #define Game_hpp
 
 #include <stdio.h>
-#include <vector>
 #include <set>
 #include<string.h>//字符数组的函数定义的头文件
 #include<stdlib.h>//stdlib 头文件即standard library标准库头文件stdlib 头文件里包含了C、C++语言的最常用的系统函数该 ,文件包含了C语言标准库函数的定义.
@@ -27,12 +26,15 @@
 using namespace std;
 
 class MCTS;
-
 typedef struct coordinate
 {
     int row;
     int column;
 } coordinate;
+
+bool operator<(coordinate const& x, coordinate const& y){
+    return (x.row < y.row)&&(x.column < y.column);
+}
 
 typedef struct//typedef的作用是在C中定义一个结构体类型
 {
