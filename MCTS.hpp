@@ -10,6 +10,7 @@
 #define MCTS_hpp
 
 #include "Node.hpp"
+#include <stdlib.h>
 #include <math.h>
 #include <set>
 #define BLACK 1
