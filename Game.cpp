@@ -215,6 +215,7 @@ bool Game::isTerminal(int (*board)[Length], coordinate coor)
         return false;//游戏结束
 }
 // This is the starting point of Jonathan's code.
+
 int temp_board[Length][Length];
 
 void Game::manager(const int (*board)[Length], int player)
@@ -478,13 +479,23 @@ set<coordinate> Game::converter()
 {
     set<coordinate> coordinates;
 
-    int i, j;
+    int i, j, p = 3;
     
     for (i = 0; i <= 14; i++)
     {
         for (j = 0; j <= 14; j++)
         {
-            if (temp_board[i][j] >= 5)
+            if (temp_board[i][j] > 3)
+            {
+                p = temp_board[i][j];
+            }
+        }
+    }
+    for (i = 0; i <= 14; i++)
+    {
+        for (j = 0; j <= 14; j++)
+        {
+            if (temp_board[i][j] == p)
             {
                 coordinate a;
 
@@ -502,7 +513,8 @@ set<coordinate> Game::converter()
 set<coordinate> Game::getValidMoves(const int (*state)[Length], int player)
 {
     manager(state, player);
-      grader();
+
+    grader();
     
     multiplier();
     
