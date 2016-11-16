@@ -38,7 +38,6 @@ public:
     int getWinner(int (*board)[Length], coordinate move); // 1 is BLACK, 2 is WHITE, 0 is "no winner", 3 is TIE
     void mark(int (*board)[Length], int player, coordinate move);
     
-private:
 };
 
 #endif /* MCTS_hpp */
