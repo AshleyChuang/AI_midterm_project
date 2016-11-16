@@ -1,6 +1,5 @@
 #include "Game.hpp"
-//#include <stdio.h>
-
+#include <stdio.h>
 int main() {
     char k;
     system("color E0");//设置颜色
