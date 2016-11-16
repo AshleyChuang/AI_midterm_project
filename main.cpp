@@ -109,7 +109,7 @@ void Game::playGame()
         if( choice == 1 )
             
         {
-            player=3-player;
+            //player=3-player;
             
             AI( &Point2.Y, &Point2.X );
             
@@ -133,16 +133,15 @@ void Game::playGame()
 
 void Game::AI(int* y, int* x)
 {
-    for (int i=0; i<Length; i++) {
-        for (int j=0; j<Length; j++) {
-            printf("chess board [%d][%d] = %d\n", i, j, chessboard[i][j]);
-        }
-    }
-    coordinate move = mcts->getBestAction(this->chessboard, WHITE, this->g_iPointLen);
+//    for (int i=0; i<Length; i++) {
+//        for (int j=0; j<Length; j++) {
+//            printf("chess board [%d][%d] = %d\n", i, j, chessboard[i][j]);
+//        }
+//    }
+    coordinate move = mcts->getBestAction(this->chessboard, BLACK, this->g_iPointLen);
+    printf("return a coordinate\n");
     *y = move.column;
     *x = move.row;
-    *y = 1;
-    *x= 10;
 }
 
 void Game::draw() /* 画棋盘 */
@@ -152,33 +151,33 @@ void Game::draw() /* 画棋盘 */
     for(j=0;j<15;j++)
         for(i=0;i<15;i++){
             if(chessboard[j][i]==BLANK) strcpy(p[j][i],"  \0");
-            if(chessboard[j][i]==BLACK) strcpy(p[j][i],"●\0");
-            if(chessboard[j][i]==WHITE) strcpy(p[j][i],"◎\0");
+            if(chessboard[j][i]==BLACK) strcpy(p[j][i],"1\0");
+            if(chessboard[j][i]==WHITE) strcpy(p[j][i],"2\0");
         }
     
-    printf("         A   B   C   D   E   F   G   H   I   J   K   L   M   N   0  \n");
+    printf("         A  B  C  D  E  F  G  H  I  J  K  L  M  N  0  \n");
     
-    printf("       ┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐\n");
+    printf("       |--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|\n");
     
     for(i=0,j=0;i<14;i++,j++){
         
-        printf("     %2d│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%d\n",j,p[i][0],p[i][1],p[i][2],p[i][3],p[i][4],p[i][5],p[i][6],p[i][7],p[i][8],p[i][9],p[i][10],p[i][11],p[i][12],p[i][13],p[i][14],j);
+        printf("     %2d|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%d\n",j,p[i][0],p[i][1],p[i][2],p[i][3],p[i][4],p[i][5],p[i][6],p[i][7],p[i][8],p[i][9],p[i][10],p[i][11],p[i][12],p[i][13],p[i][14],j);
         
-        printf("       ├─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┤\n");
+        printf("       |--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|\n");
         
     }
     
-    printf("     14│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│0\n",p[14][0],p[14][1],p[14][2],p[14][3],p[14][4],p[14][5],p[14][6],p[14][7],p[14][8],p[14][9],p[14][10],p[14][11],p[14][12],p[14][13],p[14][14]);
+    printf("     14|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|0\n",p[14][0],p[14][1],p[14][2],p[14][3],p[14][4],p[14][5],p[14][6],p[14][7],p[14][8],p[14][9],p[14][10],p[14][11],p[14][12],p[14][13],p[14][14]);
     
-    printf("       └─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┘\n");
-    printf("         A   B   C   D   E   F   G   H   I   J   K   L   M   N   0  \n");
+    printf("       |--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|\n");
+    printf("         A  B  C  D  E  F  G  H  I  J  K  L  M  N  0   \n");
     
 }
 
 int Game::getWinner(int (*board)[Length],coordinate coor)
 {
-    int x = coor.row;
-    int y = coor.column;
+    const int x = coor.row;
+    const int y = coor.column;
     int player = board[x][y];
     int i,w=1,mz=1,nz=1,z=1;
     for(i=1;i<5;i++)
