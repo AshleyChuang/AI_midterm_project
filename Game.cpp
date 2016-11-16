@@ -7,9 +7,10 @@
 //
 
 #include "Game.hpp"
+#include "MCTS.hpp"
 
 Game::Game(){
-    mcts = new MCTS;
+    mcts = new MCTS();
     int i,j;
     g_iPointLen = Length * Length;
     Point1.X = 0;
@@ -19,7 +20,7 @@ Game::Game(){
     Point2.Y = 7;
     Point2.iFlag = BLACK;
     for( i=0; i <Length*Length; ++i )
-        for(j=0;j<length;++j)
+        for(j=0;j<Length;++j)
             chessboard[i][j] = BLANK;
 }
 
@@ -31,10 +32,10 @@ void Game:: MakePoint( Point * pPoint, int iGameFlag )
         char cor;
         printf("please place your coordinate\n ");
         
-
+        
         while( scanf( "%d%c", &pPoint->X, &cor) )
         {
-            &pPoint->Y=cor-65;
+            pPoint->Y = cor-65;
             if( ( pPoint->X < 0 || pPoint->X >Length-1 ) || ( pPoint->Y < 0 || pPoint->Y >Length-1 ) )
                 printf( "WRONG coordinate!PLEASE INPUT AGAIN：");
             else if( chessboard[pPoint->X][pPoint->Y] )
@@ -42,8 +43,8 @@ void Game:: MakePoint( Point * pPoint, int iGameFlag )
             else break;
         }
     }
-
-   chessboard[pPoint->X][pPoint->Y] = pPoint->iFlag;
+    
+    chessboard[pPoint->X][pPoint->Y] = pPoint->iFlag;
     --g_iPointLen;
     system("cls");
     draw();
@@ -61,45 +62,49 @@ void Game::mark(int (*board)[Length], int player, coordinate move)
     board[cordinate_x][cordinate_y] = player;
 }
 
+
 void Game::playGame()
-{                                
+{
     printf("\t\t\tPlease input the coordinate（ex:13H）\n\n\n");
     draw();
     printf("First step please input 1，Second step please input2：");
+    int choice;
     while( scanf( "%d", &choice ), choice!=1 && choice!=2 )
         printf( "INPUT ERROR!PLEASE INPUT AGAIN!");
     if( choice == 2 )
         MakePoint( &Point2, 0 );
     choice = 1;
-
     while( g_iPointLen )
     {
         MakePoint( &Point1, 1 );
-        if( getWinner( chessboard,&Point1.X, &Point1.Y )==1 )
-        
+        coordinate temp;
+        temp.row = Point1.X;
+        temp.column = Point1.Y;
+        if( getWinner( chessboard, temp )==1 ) {
             printf("YOU WIN!\n");
             return;
-
+            
         }    /* 玩家赢 */
-
+        
         if( choice == 1 )
-
+            
         {
             player=3-player;
-
+            
             AI( &Point2.Y, &Point2.X );
-
+            
             MakePoint( &Point2, 0 );
-
-            if( getWinner(chessboard,&Point2.X, &Point2.Y)==2)
-
+            coordinate temp;
+            temp.row = Point2.X;
+            temp.column = Point2.Y;
+            if( getWinner(chessboard,temp)==2)
+                
             {               /* 电脑赢 */
-
-                    printf( "THE whitePUTER WIN!\n" );
-
-                    return;
-
-                }
+                
+                printf( "THE whitePUTER WIN!\n" );
+                
+                return;
+                
             }
         }
     }
@@ -120,27 +125,27 @@ void Game::draw() /* 画棋盘 */
     for(j=0;j<15;j++)
         for(i=0;i<15;i++){
             if(chessboard[j][i]==BLANK) strcpy(p[j][i],"  \0");
-            if(chessboard[j][i]==black) strcpy(p[j][i],"●\0");
-            if(chessboard[j][i]==white) strcpy(p[j][i],"◎\0");
+            if(chessboard[j][i]==BLACK) strcpy(p[j][i],"●\0");
+            if(chessboard[j][i]==WHITE) strcpy(p[j][i],"◎\0");
         }
-
-     printf("         A   B   C   D   E   F   G   H   I   J   K   L   M   N   0  \n");
-
+    
+    printf("         A   B   C   D   E   F   G   H   I   J   K   L   M   N   0  \n");
+    
     printf("       ┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐\n");
-
+    
     for(i=0,j=0;i<14;i++,j++){
-
-    printf("     %2d│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%d\n",j,p[i][0],p[i][1],p[i][2],p[i][3],p[i][4],p[i][5],p[i][6],p[i][7],p[i][8],p[i][9],p[i][10],p[i][11],p[i][12],p[i][13],p[i][14],j);
-
-    printf("       ├─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┤\n");
-
+        
+        printf("     %2d│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%d\n",j,p[i][0],p[i][1],p[i][2],p[i][3],p[i][4],p[i][5],p[i][6],p[i][7],p[i][8],p[i][9],p[i][10],p[i][11],p[i][12],p[i][13],p[i][14],j);
+        
+        printf("       ├─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┼─┤\n");
+        
     }
-
+    
     printf("     14│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│0\n",p[14][0],p[14][1],p[14][2],p[14][3],p[14][4],p[14][5],p[14][6],p[14][7],p[14][8],p[14][9],p[14][10],p[14][11],p[14][12],p[14][13],p[14][14]);
-
+    
     printf("       └─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┘\n");
     printf("         A   B   C   D   E   F   G   H   I   J   K   L   M   N   0  \n");
-
+    
 }
 
 
@@ -148,7 +153,7 @@ int Game::getWinner(const int (*board)[Length],coordinate coor)
 {
     int x = coor.row;
     int y = coor.column;
-    board[x][y]=player;
+    player = board[x][y];
     int i,w=1,mz=1,nz=1,z=1;
     for(i=1;i<5;i++)
     {
@@ -176,8 +181,8 @@ int Game::getWinner(const int (*board)[Length],coordinate coor)
             mz++;
         else break;//左
     }
-        if(mz>=5)
-            return player;
+    if(mz>=5)
+        return player;
     for(i=1;i<5;i++)
     {
         if(x+i<15&&y+i<15&&board[x+i][y+i]==player)
@@ -212,7 +217,7 @@ int Game::getWinner(const int (*board)[Length],coordinate coor)
 
 bool Game::isTerminal(int (*board)[Length], coordinate coor)
 {
-    if getWinner(board, coor)=0
+    if(getWinner(board, coor)==0)
         return true;//游戏尚未结束
     else
         return false;//游戏结束
@@ -221,33 +226,33 @@ bool Game::isTerminal(int (*board)[Length], coordinate coor)
 // This is the starting point of Jonathan's code.
 
 /*
-#include <stdlib.h>
-#include <map>
-#include <vector>
-using namespace std;
-
-
-int board[15][15] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-*/
+ #include <stdlib.h>
+ #include <map>
+ #include <vector>
+ using namespace std;
+ 
+ 
+ int board[15][15] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+ {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+ */
 
 int manager(int x)
 {
     int i, j;
-
+    
     if (x == 1) // black, AI
     {
         for (i = 0; i <= 14; i++)
@@ -288,7 +293,7 @@ int manager(int x)
 void grader()
 {
     int i, j, n, m, j_, i_, _j;
-
+    
     for (i = 0; i <= 14; i++)
     {
         for (j = 0; j <= 14; j++)
@@ -298,13 +303,13 @@ void grader()
                 for (n = -3; n <= 3; n++)
                 {
                     j_ = j + n;
-
+                    
                     i_ = i + n;
-
+                    
                     _j = j - n;
-
+                    
                     m = 4 - abs(n);
-
+                    
                     if (j_ >= 0 and j_ <= 14 and board[i ][j_] < 88)
                     {
                         board[i ][j_] += m;
@@ -330,9 +335,9 @@ void grader()
 void multiplier()
 {
     int c = 0;
-
+    
     int i, j, m, n;
-
+    
     for (i = 0; i <= 14; i++) // →
     {
         for (j = 0; j <= 14; j++)
@@ -360,7 +365,7 @@ void multiplier()
         }
         c = 0;
     }
-
+    
     for (j = 0; j <= 14; j++) // ↓
     {
         for (i = 0; i <= 14; i++)
@@ -388,7 +393,7 @@ void multiplier()
         }
         c = 0;
     }
-
+    
     for (m = 0; m <= 13; m++) // ↘
     {
         for (n = 0; n <= 14 - m; n++)
@@ -416,7 +421,7 @@ void multiplier()
         }
         c = 0;
     }
-
+    
     for (m = 1; m <= 13; m++) // ↘
     {
         for (n = 0; n <= 14 - m; n++)
@@ -444,7 +449,7 @@ void multiplier()
         }
         c = 0;
     }
-
+    
     for (m = 0; m <= 13; m++) // ↗
     {
         for (n = 0; n <= 14 - m; n++)
@@ -472,7 +477,7 @@ void multiplier()
         }
         c = 0;
     }
-
+    
     for (m = 1; m <= 13; m++) // ↗
     {
         for (n = 0; n <= 14 - m; n++)
@@ -508,7 +513,7 @@ map<int, vector<tuple<int, int>>> sets;
 void converter()
 {
     int i, j;
-
+    
     for (i = 0; i <= 14; i++)
     {
         for (j = 0; j <= 14; j++)
@@ -529,43 +534,43 @@ void converter()
 }
 
 /*
-#include <iostream>
-
-void printer()
-{
-    int i, j;
-
-    for (i = 0; i <= 14; i++)
-    {
-        for (j = 0; j <= 14; j++)
-        {
-            cout << board[i][j];
-
-            if (board[i][j] / 10 >= 1)
-            {
-                cout << " ";
-            }
-            else
-            {
-                cout << "  ";
-            }
-        }
-        cout << '\n';
-    }
-}
-*/
+ #include <iostream>
+ 
+ void printer()
+ {
+ int i, j;
+ 
+ for (i = 0; i <= 14; i++)
+ {
+ for (j = 0; j <= 14; j++)
+ {
+ cout << board[i][j];
+ 
+ if (board[i][j] / 10 >= 1)
+ {
+ cout << " ";
+ }
+ else
+ {
+ cout << "  ";
+ }
+ }
+ cout << '\n';
+ }
+ }
+ */
 
 int getValidMoves()
 {
     manager(1);
-
+    
     grader();
-
+    
     multiplier();
-
+    
     printer();
-
+    
     // converter();
-
+    
     return 0;
 }

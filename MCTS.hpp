@@ -18,7 +18,9 @@
 class MCTS
 {
 public:
-    
+    MCTS(){
+        
+    }
     Node* Selection(Node* current, Game* game);
     Node* Expand(Node* current, Game* game);
     
