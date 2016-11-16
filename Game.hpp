@@ -12,8 +12,9 @@
 #include <stdio.h>
 #include <vector>
 #include <set>
-# include<string.h>//字符数组的函数定义的头文件
-# include<stdlib.h>//stdlib 头文件即standard library标准库头文件stdlib 头文件里包含了C、C++语言的最常用的系统函数该 ,文件包含了C语言标准库函数的定义.
+#include<string.h>//字符数组的函数定义的头文件
+#include<stdlib.h>//stdlib 头文件即standard library标准库头文件stdlib 头文件里包含了C、C++语言的最常用的系统函数该 ,文件包含了C语言标准库函数的定义.
+#include <map>
 
 #define BLACK 1
 #define WHITE 2

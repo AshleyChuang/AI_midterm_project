@@ -202,12 +202,13 @@ bool isTerminal(int *board)
 
 // This is the starting point of Jonathan's code.
 
+/*
 #include <stdlib.h>
 #include <map>
 #include <vector>
 using namespace std;
 
-/*
+
 int board[15][15] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -536,7 +537,7 @@ void printer()
 }
 */
 
-int main()
+int getValidMoves()
 {
     manager(1);
 
