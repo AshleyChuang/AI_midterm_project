@@ -376,11 +376,11 @@ void manager(int (*board)[Length], int player)
             {
                 if (temp_board[i][j] == 1)
                 {
-                    temp_board[i][j] = 99;
+                    temp_board[i][j] = -1;
                 }
                 else if (temp_board[i][j] == 2)
                 {
-                    temp_board[i][j] = 88;
+                    temp_board[i][j] = -2;
                 }
             }
         }
@@ -393,11 +393,11 @@ void manager(int (*board)[Length], int player)
             {
                 if (temp_board[i][j] == 2)
                 {
-                    temp_board[i][j] = 99;
+                    temp_board[i][j] = -1;
                 }
                 else if (temp_board[i][j] == 1)
                 {
-                    temp_board[i][j] = 88;
+                    temp_board[i][j] = -2;
                 }
             }
         }
