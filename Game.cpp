@@ -514,13 +514,7 @@ set<coordinate> Game::converter()
 set<coordinate> Game::getValidMoves(int (*state)[Length], int player)
 {
     manager(state, player);
-<<<<<<< HEAD
     grader();
-=======
-
-    grader();
-    
->>>>>>> 6fa486053516717b86a193f97607d53788f97f3a
     multiplier();
     
     return converter();
