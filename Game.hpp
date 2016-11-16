@@ -21,8 +21,8 @@
 #define Length 15
 
 # define BLANK 0//
-# define HUMAN 1
-# define AI_Number   2
+# define HUMAN 1 // white
+# define AI_Number   2 // black
 # define TIE 3
 /* 空位置设为0 ，玩家下的位置设为1 ，电脑下的位置设为2 */
 using namespace std;
