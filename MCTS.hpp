@@ -15,6 +15,8 @@
 #include <math.h>
 #include <list>
 
+using namespace std;
+
 class MCTS
 {
 public:

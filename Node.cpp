@@ -8,13 +8,13 @@
 
 #include "Node.hpp"
 
-Node::Node(Node* parent, coordinate action, int PlayerTookAction, int depth, int* state, int number_of_chess)
+Node::Node(Node* parent, coordinate action, int PlayerTookAction, int depth, int (*state)[Length], int number_of_chess)
 {
     this->parent = parent;
     this->action = action;
     this->player = (int)PlayerTookAction;
     this->depth = depth;
-    std::copy(state, state + 15*15, this->state);
+    std::copy(&state[0][0], &state[0][0] + 15*15, &(this->state[0][0]));
     this->number_of_chess = number_of_chess;
 }
 

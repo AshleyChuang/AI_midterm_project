@@ -26,7 +26,7 @@ Node* MCTS::getBestChild(Node* current, int Cp)
 
 coordinate MCTS::getBestAction(Game *game, int player)
 {
-    Node *root = new Node(NULL, *new coordinate, opponent(player), 0, &(game->chessboard[0][0]), 225-game->g_iPointLen);
+    Node *root = new Node(NULL, *new coordinate, opponent(player), 0, game->chessboard, 225-game->g_iPointLen);
     
     for(int i=0; i<1000; i++) {
         Node *current = Selection(root, game);
@@ -75,7 +75,7 @@ Node* MCTS::Expand(Node* current, Game* game)
     
     move_iterator = validMoves.begin();
     int playerActing = opponent(current->player);
-    Node *node = new Node(current, *move_iterator, playerActing, current->depth+1, &(current->state[0][0]), current->number_of_chess-1);
+    Node *node = new Node(current, *move_iterator, playerActing, current->depth+1, current->state, current->number_of_chess-1);
     current->children.push_back(node);
     
     game->mark(node->state, playerActing, *move_iterator);
@@ -85,10 +85,10 @@ Node* MCTS::Expand(Node* current, Game* game)
 
 int MCTS::Simulate(Node* current, Game* game, int startPlayer)
 {
-    int (*temp_board)[Length];
+    int temp_board[Length][Length];
     int number_of_chess = current->number_of_chess;
     
-    std::copy(current->state, current->state + 15*15, temp_board);
+    std::copy(&(current->state[0][0]), &(current->state[0][0]) + 15*15, &temp_board[0][0]);
     
     if(game->getWinner(temp_board, current->action) == opponent(startPlayer)) {
         // not good
@@ -105,7 +105,7 @@ int MCTS::Simulate(Node* current, Game* game, int startPlayer)
     while( winner == 0 && number_of_chess) {
         //Random
         set<coordinate> moves = game->getValidMoves(temp_board, player);
-        double r = rand() % moves.size();
+        int r = rand() % moves.size();
         set<coordinate>::const_iterator move = moves.begin();
         advance(move, r);
         game->mark(temp_board, player, *move);

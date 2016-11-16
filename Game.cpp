@@ -141,7 +141,7 @@ void Game::draw() /* 画棋盘 */
 }
 
 
-int Game::getWinner(const int (*board)[Length],coordinate coor)
+int Game::getWinner(int (*board)[Length],coordinate coor)
 {
     int x = coor.row;
     int y = coor.column;
@@ -217,10 +217,11 @@ bool Game::isTerminal(int (*board)[Length], coordinate coor)
 // This is the starting point of Jonathan's code.
 int temp_board[Length][Length];
 
-void Game::manager(const int (*board)[Length], int player)
+void Game::manager(int (*board)[Length], int player)
 {
     int i, j;
-
+    std::copy(&temp_board[0][0], &temp_board[0][0] + Length*Length, &board[0][0]);
+    
     if (player == 1) // black, AI
     {
         for (i = 0; i <= 14; i++)
@@ -499,11 +500,10 @@ set<coordinate> Game::converter()
     return coordinates;
 }
 
-set<coordinate> Game::getValidMoves(const int (*state)[Length], int player)
+set<coordinate> Game::getValidMoves(int (*state)[Length], int player)
 {
     manager(state, player);
-      grader();
-    
+    grader();
     multiplier();
     
     return converter();

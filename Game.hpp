@@ -21,7 +21,7 @@
 
 #define Length 15
 
-# define BLANK 0//
+#define BLANK 0//
 
 /* 空位置设为0 ，玩家下的位置设为1 ，电脑下的位置设为2 */
 using namespace std;
@@ -46,11 +46,11 @@ class Game
 public:
     Game();
     
-    set<coordinate> getValidMoves(const int (*state)[Length], int player);
+    set<coordinate> getValidMoves(int (*state)[Length], int player);
     set<coordinate> getValidMoves(int player);
     
     bool isTerminal(int (*board)[Length], coordinate move);
-    int getWinner(const int (*board)[Length], coordinate move); // 1 is BLACK, 2 is WHITE, 0 is "no winner", 3 is TIE
+    int getWinner(int (*board)[Length], coordinate move); // 1 is BLACK, 2 is WHITE, 0 is "no winner", 3 is TIE
     void mark(int (*board)[Length], int player, coordinate move);
     
     void draw();
@@ -61,7 +61,7 @@ public:
     void MakePoint( Point * pPoint, int iGameFlag );
     void AI(int* y, int* x);
     
-    void manager(const int (*board)[Length], int player);
+    void manager(int (*board)[Length], int player);
     void grader();
     void multiplier();
     set<coordinate> converter();
