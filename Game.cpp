@@ -484,9 +484,8 @@ void multiplier()
     }
 }
 
-map<int, vector<tuple<int, int>>> sets;
+map<int, set<coordinate>> coordinates;
 
-// under construction ......
 void converter()
 {
     int i, j;
@@ -497,13 +496,17 @@ void converter()
         {
             if (board[i][j] != 0)
             {
-                if (sets.find(board[i][j]) == sets.begin())
+                coordinate a;
+
+                a.row = i; a.column = j;
+
+                if (coordinates.find(board[i][j]) == coordinates.begin())
                 {
-                    sets[board[i][j]].push_back(make_tuple(i, j));
+                    coordinates[board[i][j]].insert(a);
                 }
                 else
                 {
-                    // sets[board[i][j]] = {(i, j)};
+                    coordinates[board[i][j]] = set<a>;
                 }
             }
         }
