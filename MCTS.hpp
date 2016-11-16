@@ -10,6 +10,7 @@
 #define MCTS_hpp
 
 #include "Node.hpp"
+#include "Game.hpp"
 #include <math.h>
 
 using namespace std;

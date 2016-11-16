@@ -26,15 +26,6 @@
 using namespace std;
 
 class MCTS;
-typedef struct coordinate
-{
-    int row;
-    int column;
-} coordinate;
-
-bool operator<(coordinate const& x, coordinate const& y){
-    return (x.row < y.row)&&(x.column < y.column);
-}
 
 typedef struct//typedef的作用是在C中定义一个结构体类型
 {

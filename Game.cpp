@@ -1,7 +1,7 @@
-#include "MCTS.hpp"
+#include "Game.hpp"
 
 Game::Game(){
-    mcts = new MCTS();
+    //mcts = new MCTS();
     int i,j;
     g_iPointLen = Length * Length;
     Point1.X = 0;

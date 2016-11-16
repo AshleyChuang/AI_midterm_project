@@ -1,7 +1,5 @@
 #include <iostream>
 #include "Game.hpp"
-#include <vector>
-#include <map>
 
 
 int main() {
