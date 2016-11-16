@@ -28,9 +28,13 @@ void Game:: MakePoint( Point * pPoint, int iGameFlag )
 {
     if( iGameFlag )
     {
+        char cor;
         printf("please place your coordinate\n ");
-        while( scanf( "%d%d", &pPoint->X, &pPoint->Y ) )
+        
+
+        while( scanf( "%d%c", &pPoint->X, &cor) )
         {
+            &pPoint->Y=cor-65;
             if( ( pPoint->X < 0 || pPoint->X >Length-1 ) || ( pPoint->Y < 0 || pPoint->Y >Length-1 ) )
                 printf( "WRONG coordinate!PLEASE INPUT AGAIN：");
             else if( chessboard[pPoint->X][pPoint->Y] )
@@ -44,9 +48,12 @@ void Game:: MakePoint( Point * pPoint, int iGameFlag )
     system("cls");
     draw();
     if( iGameFlag == 0 )
-        printf("The whiteputer place at %d %d\n", pPoint->X, pPoint->Y );
+    {
+        char coy;
+        coy=pPoint->Y+65;
+        printf("The blackputer place at %d%c\n", pPoint->X, coy );
+    }
 }
-
 void Game::mark(int** board, int player, coordinate move)
 {
     int cordinate_x = move.row;
@@ -56,7 +63,7 @@ void Game::mark(int** board, int player, coordinate move)
 
 void Game::playGame()
 {                                
-    printf("\t\t\tPlease input the coordinate（ex:13 6）interval by bankBLANKce。\n\n\n");
+    printf("\t\t\tPlease input the coordinate（ex:13H）\n\n\n");
     draw();
     printf("First step please input 1，Second step please input2：");
     while( scanf( "%d", &choice ), choice!=1 && choice!=2 )
@@ -117,7 +124,7 @@ void Game::draw() /* 画棋盘 */
             if(chessboard[j][i]==white) strcpy(p[j][i],"◎\0");
         }
 
-    printf("       A    B   C    D   E   F   G   H   I   J   K   L   M   N    O  \n");
+     printf("         A   B   C   D   E   F   G   H   I   J   K   L   M   N   0  \n");
 
     printf("       ┌─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┬─┐\n");
 
@@ -132,6 +139,7 @@ void Game::draw() /* 画棋盘 */
     printf("     14│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│%s│0\n",p[14][0],p[14][1],p[14][2],p[14][3],p[14][4],p[14][5],p[14][6],p[14][7],p[14][8],p[14][9],p[14][10],p[14][11],p[14][12],p[14][13],p[14][14]);
 
     printf("       └─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┴─┘\n");
+    printf("         A   B   C   D   E   F   G   H   I   J   K   L   M   N   0  \n");
 
 }
 
