@@ -54,7 +54,7 @@ void Game:: MakePoint( Point * pPoint, int iGameFlag )
         printf("The blackputer place at %d%c\n", pPoint->X, coy );
     }
 }
-void Game::mark(int** board, int player, coordinate move)
+void Game::mark(int (*board)[Length], int player, coordinate move)
 {
     int cordinate_x = move.row;
     int cordinate_y = move.column;
@@ -144,8 +144,10 @@ void Game::draw() /* 画棋盘 */
 }
 
 
-int Game::getWinner(const int (*board)[Length],int x,int y)
+int Game::getWinner(const int (*board)[Length],coordinate coor)
 {
+    int x = coor.row;
+    int y = coor.column;
     board[x][y]=player;
     int i,w=1,mz=1,nz=1,z=1;
     for(i=1;i<5;i++)
@@ -208,12 +210,12 @@ int Game::getWinner(const int (*board)[Length],int x,int y)
 }
 
 
-bool isTerminal(int (*board)[Length])
+bool Game::isTerminal(int (*board)[Length], coordinate coor)
 {
-    if getWinner()=0
-        return 1;//游戏尚未结束
+    if getWinner(board, coor)=0
+        return true;//游戏尚未结束
     else
-        return 0;//游戏结束
+        return false;//游戏结束
 }
 
 // This is the starting point of Jonathan's code.

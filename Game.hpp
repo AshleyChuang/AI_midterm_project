@@ -47,7 +47,7 @@ class Game
 public:
     Game();
     
-    set<coordinate> getValidMoves(const int* state, int player);
+    set<coordinate> getValidMoves(const int (*state)[Length], int player);
     set<coordinate> getValidMoves(int player);
     
     bool isTerminal(int (*board)[Length], coordinate move);

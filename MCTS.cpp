@@ -47,8 +47,8 @@ int MCTS::opponent(int startPlayer)
 
 Node* MCTS::Selection(Node* current, Game* game)
 {
-    while(!game->isTerminal(&(current->state[0][0])) || current->number_of_chess>0){
-        set<coordinate> validMoves = game->getValidMoves(&(current->state[0][0]), current->player);
+    do{
+        set<coordinate> validMoves = game->getValidMoves(current->state, current->player);
         if(validMoves.size() > current->children.size()) { // current node has other coordinates to move, try them all!
             return Expand(current, game);
         }
@@ -56,13 +56,13 @@ Node* MCTS::Selection(Node* current, Game* game)
             double Cp = 1.44;
             current = getBestChild(current, Cp);
         }
-    }
+    }while(!game->isTerminal(current->state, current->action) || current->number_of_chess>0);
     return current;
 }
 
 Node* MCTS::Expand(Node* current, Game* game)
 {
-    set<coordinate> validMoves = game->getValidMoves(&(current->state[0][0]), current->player); // get all the valid moves of current node
+    set<coordinate> validMoves = game->getValidMoves(current->state, current->player); // get all the valid moves of current node
     set<coordinate>::const_iterator move_iterator;
     
     vector<Node*>::const_iterator iterator;
@@ -85,28 +85,33 @@ Node* MCTS::Expand(Node* current, Game* game)
 
 int MCTS::Simulate(Node* current, Game* game, int startPlayer)
 {
-    int* temp_board;
+    int (*temp_board)[Length];
     int number_of_chess = current->number_of_chess;
-    if (number_of_chess==0) {
-        return 1;
-    }
+    
     std::copy(current->state, current->state + 15*15, temp_board);
+    
     if(game->getWinner(temp_board, current->action) == opponent(startPlayer)) {
         // not good
-        current->parent->wins = -100;
+        //current->parent->wins = -1;
         return 0;
     }
+    if (number_of_chess==0) { // the game is tie
+        return 1;
+    }
+    
     int player = opponent(startPlayer);
     coordinate move = current->action;
     int winner = game->getWinner(temp_board, move);
     while( winner == 0 && number_of_chess) {
         //Random
         set<coordinate> moves = game->getValidMoves(temp_board, player);
-        move = moves.find(); // pick a coordinate randomly in moves_set
-        game->mark(temp_board, player, move);
+        double r = rand() % moves.size();
+        set<coordinate>::const_iterator move = moves.begin();
+        advance(move, r);
+        game->mark(temp_board, player, *move);
         player = opponent(player);
         number_of_chess--;
-        winner = game->getWinner(temp_board, move);
+        winner = game->getWinner(temp_board, *move);
     }
     
     if (winner == startPlayer)
