@@ -1,11 +1,3 @@
-//
-//  Game.cpp
-//  AI_HW
-//
-//  Created by Ashley on 11/10/16.
-//  Copyright © 2016 Ashley. All rights reserved.
-//
-
 #include "Game.hpp"
 #include "MCTS.hpp"
 
@@ -222,22 +214,20 @@ bool Game::isTerminal(int (*board)[Length], coordinate coor)
     else
         return false;//游戏结束
 }
-
 // This is the starting point of Jonathan's code.
 int temp_board[Length][Length];
 
 void Game::manager(const int (*board)[Length], int player)
 {
     int i, j;
-    std::copy(board, board + Length*Length, temp_board);
-    
+
     if (player == 1) // black, AI
     {
         for (i = 0; i <= 14; i++)
         {
             for (j = 0; j <= 14; j++)
             {
-                if (board[i][j] == 2)
+                if (temp_board[i][j] == 2)
                 {
                     temp_board[i][j] = 99;
                 }
@@ -286,7 +276,6 @@ void Game::grader()
                     _j = j - n;
                     
                     m = 4 - abs(n);
-                    
                     if (j_ >= 0 and j_ <= 14 and temp_board[i ][j_] < 88)
                     {
                         temp_board[i ][j_] += m;
@@ -484,10 +473,11 @@ void Game::multiplier()
     }
 }
 
+
 set<coordinate> Game::converter()
 {
     set<coordinate> coordinates;
-    
+
     int i, j;
     
     for (i = 0; i <= 14; i++)
@@ -497,11 +487,11 @@ set<coordinate> Game::converter()
             if (temp_board[i][j] >= 5)
             {
                 coordinate a;
-                
+
                 a.row = i;
-                
+
                 a.column = j;
-                
+
                 coordinates.insert(a);
             }
         }
@@ -512,8 +502,7 @@ set<coordinate> Game::converter()
 set<coordinate> Game::getValidMoves(const int (*state)[Length], int player)
 {
     manager(state, player);
-    
-    grader();
+      grader();
     
     multiplier();
     
