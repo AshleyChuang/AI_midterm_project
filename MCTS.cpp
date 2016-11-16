@@ -39,15 +39,15 @@ coordinate MCTS::getBestAction(Game *game, int player)
 
 int MCTS::opponent(int startPlayer)
 {
-    if(startPlayer == HUMAN)
-        return AI_Number;
+    if(startPlayer == BLACK)
+        return WHITE;
     else
-        return HUMAN;
+        return BLACK;
 }
 
 Node* MCTS::Selection(Node* current, Game* game)
 {
-    while(!game->isTerminal(&(current->state[0][0]))){
+    while(!game->isTerminal(&(current->state[0][0])) || current->number_of_chess>0){
         set<coordinate> validMoves = game->getValidMoves(&(current->state[0][0]), current->player);
         if(validMoves.size() > current->children.size()) { // current node has other coordinates to move, try them all!
             return Expand(current, game);
@@ -62,29 +62,25 @@ Node* MCTS::Selection(Node* current, Game* game)
 
 Node* MCTS::Expand(Node* current, Game* game)
 {
-    vector<coordinate> validMoves = game->getValidMoves(&(current->state[0][0]), current->player); // get all the valid moves of current node
+    set<coordinate> validMoves = game->getValidMoves(&(current->state[0][0]), current->player); // get all the valid moves of current node
+    set<coordinate>::const_iterator move_iterator;
     
-    for(int i=0; i<validMoves.size(); i++) {
-        set<Node*>::const_iterator iterator;
-        bool action_exist = false;
-        for (iterator = current->children.begin(); iterator!=current->children.end(); iterator++) {
-            if (((*iterator)->action.row == validMoves[i].row) && ((*iterator)->action.column == validMoves[i].column)) {
-                action_exist = true;
-                break;
-            }
-        }
-        if (action_exist) {
-            continue;
-        }
-        int playerActing = opponent(current->player);
-        Node *node = new Node(current, validMoves[i], playerActing, current->depth+1, &(current->state[0][0]), current->number_of_chess-1);
-        current->children.push_back(node);
-        
-        game->mark(&(node->state[0][0]), playerActing, validMoves[i]);
-        
-        return node;
+    vector<Node*>::const_iterator iterator;
+    for (iterator = current->children.begin(); iterator!=current->children.end(); iterator++) {
+        coordinate temp;
+        temp.row = (*iterator)->action.row;
+        temp.column = (*iterator)->action.column;
+        validMoves.erase(temp);
     }
-    exit(1);
+    
+    move_iterator = validMoves.begin();
+    int playerActing = opponent(current->player);
+    Node *node = new Node(current, *move_iterator, playerActing, current->depth+1, &(current->state[0][0]), current->number_of_chess-1);
+    current->children.push_back(node);
+    
+    game->mark(node->state, playerActing, *move_iterator);
+    
+    return node;
 }
 
 int MCTS::Simulate(Node* current, Game* game, int startPlayer)

@@ -9,14 +9,15 @@
 #include "Game.hpp"
 
 Game::Game(){
+    mcts = new MCTS;
     int i,j;
     g_iPointLen = Length * Length;
     Point1.X = 0;
     Point1.Y = 0;
-    Point1.iFlag = white;
+    Point1.iFlag = WHITE;
     Point2.X = 7;
     Point2.Y = 7;
-    Point2.iFlag = black;
+    Point2.iFlag = BLACK;
     for( i=0; i <Length*Length; ++i )
         for(j=0;j<length;++j)
             chessboard[i][j] = BLANK;
@@ -46,9 +47,11 @@ void Game:: MakePoint( Point * pPoint, int iGameFlag )
         printf("The whiteputer place at %d %d\n", pPoint->X, pPoint->Y );
 }
 
-void mark(const int *board，int player，int cordinate_x，int cordinate_y)
+void Game::mark(int** board, int player, coordinate move)
 {
-    board[cordinate_x][cordinate_y]=player;
+    int cordinate_x = move.row;
+    int cordinate_y = move.column;
+    board[cordinate_x][cordinate_y] = player;
 }
 
 void Game::playGame()
@@ -96,7 +99,12 @@ void Game::playGame()
     printf("draw\n");
 }
 
-
+void Game::AI(int* y, int* x)
+{
+    coordinate move = mcts->getBestAction(this, WHITE);
+    *y = move.column;
+    *x = move.row;
+}
 
 void Game::draw() /* 画棋盘 */
 {
@@ -128,7 +136,7 @@ void Game::draw() /* 画棋盘 */
 }
 
 
-int Game::getWinner(const int *board,int x,int y)
+int Game::getWinner(const int (*board)[Length],int x,int y)
 {
     board[x][y]=player;
     int i,w=1,mz=1,nz=1,z=1;
@@ -192,7 +200,7 @@ int Game::getWinner(const int *board,int x,int y)
 }
 
 
-bool isTerminal(int *board)
+bool isTerminal(int (*board)[Length])
 {
     if getWinner()=0
         return 1;//游戏尚未结束
