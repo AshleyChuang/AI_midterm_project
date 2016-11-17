@@ -15,16 +15,16 @@ using namespace std;
 
 class coordinate;
 class MCTS;
-int white_flag = 0;
-int black_flag = 0;
-int white_must_win = 0;
+//int white_flag = 0;
+//int black_flag = 0;
+//int white_must_win = 0;
 typedef struct coordinate
 {
     int row;
     int column;
 } coordinate;
-coordinate white_must_be;
-set<coordinate> black_must_be;
+//coordinate white_must_be;
+//set<coordinate> black_must_be;
 bool operator<(coordinate const& x, coordinate const& y){
     return (x.row > 0)&&(y.row > 0);
 }
@@ -121,13 +121,13 @@ Node* MCTS::getBestChild(Node* current, int Cp)
 
 coordinate MCTS::getBestAction(int (*board)[Length], int player, int g_iPointLen)
 {
-    white_must_win = 0;
+    //white_must_win = 0;
     Node *root = new Node(NULL, *new coordinate, player, 0, board, Length*Length-g_iPointLen);
     for(int i=0; i<5000; i++) {
         Node *current = Selection(root, board);
-        if (white_must_win) {
-            return white_must_be;
-        }
+//        if (white_must_win) {
+//            return white_must_be;
+//        }
         //printf("--------------------------\n");
         //printf("%d, %d\n", current->action.row, current->action.column);
         int value = Simulate(current, board, opponent(player));
@@ -150,10 +150,14 @@ Node* MCTS::Selection(Node* current, int (*board)[Length])
 {
     do{
         set<coordinate> validMoves = getValidMoves(current->state, current->player);
-        if (white_flag || current->depth == 1 ) {
-            white_must_win = 1;
-            return NULL;
-        }
+//        if (white_flag || current->depth == 1 ) {
+//            white_must_win = 1;
+//            return NULL;
+//        }
+//        if (black_flag || current->depth==1) {
+//            printf("BLACK_FLAG");
+//            
+//        }
         if(validMoves.size() > current->children.size()) { // current node has other coordinates to move, try them all!
             Node *node = Expand(current, board);
             //cout << "Expand: ";
@@ -357,12 +361,13 @@ set<coordinate> MCTS::getValidMoves(int (*state)[Length], int player)
     manager(state, player);
     grader();
     multiplier(player);
-    if (black_flag) {
-        return black_must_be;
-    }
-    else {
-        return converter();
-    }
+//    if (black_flag) {
+//        return black_must_be;
+//    }
+//    else {
+//        return converter();
+//    }
+    return converter();
 }
 
 Node::Node(Node* parent, coordinate action, int PlayerTookAction, int depth, int (*state)[Length], int number_of_chess)
@@ -495,8 +500,8 @@ void multiplier(int player){
             } if (m != m_ and m_ != 0) {
                 if (m_ == -1) {
                     int g = 0, h = 0;
-                    black_flag = 0;
-                    white_flag = 0;
+                    //black_flag = 0;
+                    //white_flag = 0;
                     if (j - 1 - c >= 0 and temp_board[i][j - 1 - c] >= 0) {
                         temp_board[i][j - 1 - c] *= c;
                         g = 1;
@@ -504,6 +509,7 @@ void multiplier(int player){
                         temp_board[i][j] *= c;
                         h = 1;
                     }
+                    /*
                     if (c==4) {
                         if (player == 1) {
                             black_flag = 1;
@@ -530,15 +536,16 @@ void multiplier(int player){
                                 white_must_be.row = i;
                                 white_must_be.column = j;
                             }
-                            return;
+                            //return;
                         }
                     }
+                     */
                     c = 0;
                 } else if (m_ == -2) {
                     int g = 0;
                     int h = 0;
-                    black_flag = 0;
-                    white_flag = 0;
+                    //black_flag = 0;
+                    //white_flag = 0;
                     if (j - 1 - d >= 0 and temp_board[i][j - 1 - d] >= 0) {
                         temp_board[i][j - 1 - d] *= d;
                         g = 1;
@@ -546,6 +553,7 @@ void multiplier(int player){
                         temp_board[i][j] *= d;
                         h = 1;
                     }
+                    /*
                     if (d==4) {
                         if (player == 2) {
                             black_flag = 1;
@@ -572,10 +580,10 @@ void multiplier(int player){
                                 white_must_be.row = i;
                                 white_must_be.column = j;
                             }
-                            return;
+                            //return;
                         }
                     }
-
+                    */
                     d = 0;
                 }
             } k = j;
@@ -605,8 +613,8 @@ void multiplier(int player){
                 if (m_ == -1) {
                     int g = 0;
                     int h = 0;
-                    black_flag = 0;
-                    white_flag = 0;
+                    //black_flag = 0;
+                    //white_flag = 0;
                     if (i - 1 - c >= 0 and temp_board[i - 1 - c][j] >= 0) {
                         temp_board[i - 1 - c][j] *= c;
                         g = 1;
@@ -614,6 +622,7 @@ void multiplier(int player){
                         temp_board[i][j] *= c;
                         h = 1;
                     }
+                    /*
                     if (c==4) {
                         if (player == 1) {
                             black_flag = 1;
@@ -640,15 +649,15 @@ void multiplier(int player){
                                 white_must_be.row = i;
                                 white_must_be.column = j;
                             }
-                            return;
+                            //return;
                         }
-                    }
+                    }*/
                     c = 0;
                 } else if (m_ == -2) {
                     int g = 0;
                     int h = 0;
-                    black_flag = 0;
-                    white_flag = 0;
+                    //black_flag = 0;
+                    //white_flag = 0;
                     if (i - 1 - d >= 0 and temp_board[i - 1 - d][j] >= 0) {
                         temp_board[i - 1 - d][j] *= d;
                         g = 1;
@@ -656,6 +665,7 @@ void multiplier(int player){
                         temp_board[i][j] *= d;
                         h = 1;
                     }
+                    /*
                     if (d==4) {
                         if (player == 2) {
                             black_flag = 1;
@@ -682,9 +692,9 @@ void multiplier(int player){
                                 white_must_be.row = i;
                                 white_must_be.column = j;
                             }
-                            return;
+                            //return;
                         }
-                    }
+                    }*/
                     d = 0;
                 }
             } k = i;
@@ -713,8 +723,8 @@ void multiplier(int player){
                 if (p_ == -1) {
                     int g = 0;
                     int h = 0;
-                    black_flag = 0;
-                    white_flag = 0;
+                    //black_flag = 0;
+                    //white_flag = 0;
                     if (m + n - 1 - c >= 0 and n - 1 - c >= 0 and temp_board[m + n - 1 - c][n - 1 - c] >= 0) {
                         temp_board[m + n - 1 - c][n - 1 - c] *= c;
                         g = 1;
@@ -722,6 +732,7 @@ void multiplier(int player){
                         temp_board[m + n][n] *= c;
                         h = 1;
                     }
+                    /*
                     if (c==4) {
                         if (player == 1) {
                             black_flag = 1;
@@ -748,7 +759,7 @@ void multiplier(int player){
                                 white_must_be.row = m+n;
                                 white_must_be.column = n;
                             }
-                            return;
+                            //return;
                         }
                     }c = 0;
                 } else if (p_ == -2) {
@@ -789,9 +800,10 @@ void multiplier(int player){
                                 white_must_be.row = m+n;
                                 white_must_be.column = n;
                             }
-                            return;
+                            //return;
                         }
-                    }d = 0;
+                    }
+                     */d = 0;
                 }
             } k = n;
         } if (c != 0) {
@@ -818,8 +830,8 @@ void multiplier(int player){
                 if (p_ == -1) {
                     int g = 0;
                     int h = 0;
-                    black_flag = 0;
-                    white_flag = 0;
+                    //black_flag = 0;
+                    //white_flag = 0;
                     if (n - 1 - c >= 0 and m + n - 1 - c >= 0 and temp_board[n - 1 - c][m + n - 1 - c] >= 0) {
                         temp_board[n - 1 - c][m + n - 1 - c] *= c;
                         g = 1;
@@ -827,6 +839,7 @@ void multiplier(int player){
                         temp_board[n][m + n] *= c;
                         h = 1;
                     }
+                    /*
                     if (c==4) {
                         if (player == 1) {
                             black_flag = 1;
@@ -853,14 +866,15 @@ void multiplier(int player){
                                 white_must_be.row = n;
                                 white_must_be.column = m+n;
                             }
-                            return;
+                            //return;
                         }
-                    }c = 0;
+                    }*/
+                    c = 0;
                 } else if (p_ == -2) {
                     int g = 0;
                     int h = 0;
-                    black_flag = 0;
-                    white_flag = 0;
+                    //black_flag = 0;
+                    //white_flag = 0;
                     if (n - 1 - d >= 0 and m + n - 1 - d >= 0 and temp_board[n - 1 - d][m + n - 1 - d] >= 0) {
                         temp_board[n - 1 - d][m + n - 1 - d] *= d;
                         g = 1;
@@ -868,6 +882,7 @@ void multiplier(int player){
                         temp_board[n][m + n] *= d;
                         h = 1;
                     }
+                    /*
                     if (d==4) {
                         if (player == 2) {
                             black_flag = 1;
@@ -894,9 +909,9 @@ void multiplier(int player){
                                 white_must_be.row = n;
                                 white_must_be.column = m+n;
                             }
-                            return;
+                            //return;
                         }
-                    }d = 0;
+                    }*/d = 0;
                 }
             } k = n;
         } if (c != 0) {
@@ -923,8 +938,8 @@ void multiplier(int player){
                 if (p_ == -1) {
                     int g = 0;
                     int h = 0;
-                    black_flag = 0;
-                    white_flag = 0;
+                    //black_flag = 0;
+                    //white_flag = 0;
                     if (14 - n + 1 + c < 15 and m + n - 1 - c >= 0 and temp_board[14 - n + 1 + c][m + n - 1 - c] >= 0) {
                         temp_board[14 - n + 1 + c][m + n - 1 - c] *= c;
                         g = 1;
@@ -932,6 +947,7 @@ void multiplier(int player){
                         temp_board[14 - n][m + n] *= c;
                         h = 1;
                     }
+                    /*
                     if (c==4) {
                         if (player == 1) {
                             black_flag = 1;
@@ -958,14 +974,14 @@ void multiplier(int player){
                                 white_must_be.row = 14-n;
                                 white_must_be.column = m+n;
                             }
-                            return;
+                            //return;
                         }
-                    }c = 0;
+                    }*/c = 0;
                 } else if (p_ == -2) {
                     int g = 0;
                     int h = 0;
-                    black_flag = 0;
-                    white_flag = 0;
+                    //black_flag = 0;
+                    //white_flag = 0;
                     if (14 - n + 1 + d < 15 and m + n - 1 - d >= 0 and temp_board[14 - n + 1 + d][m + n - 1 - d] >= 0) {
                         temp_board[14 - n + 1 + d][m + n - 1 - d] *= d;
                         g = 1;
@@ -973,6 +989,7 @@ void multiplier(int player){
                         temp_board[14 - n][m + n] *= d;
                         h = 1;
                     }
+                    /*
                     if (d==4) {
                         if (player == 2) {
                             black_flag = 1;
@@ -999,9 +1016,9 @@ void multiplier(int player){
                                 white_must_be.row = 14-n;
                                 white_must_be.column = m+n;
                             }
-                            return;
+                            //return;
                         }
-                    }d = 0;
+                    }*/d = 0;
                 }
             } k = n;
         } if (c != 0) {
@@ -1028,6 +1045,7 @@ void multiplier(int player){
                 if (p_ == -1) {
                     int h = 0;
                     int g = 0;
+                    
                     if (14 - m - n + 1 + c < 15 and n - 1 - c >= 0 and temp_board[14 - m - n + 1 + c][n - 1 - c] >= 0) {
                         temp_board[14 - m - n + 1 + c][n - 1 - c] *= c;
                         h = 1;
@@ -1035,6 +1053,7 @@ void multiplier(int player){
                         temp_board[14 - m - n][n] *= c;
                         g = 1;
                     }
+                    /*
                     if (c==4) {
                         if (player == 1) {
                             black_flag = 1;
@@ -1061,8 +1080,8 @@ void multiplier(int player){
                                 white_must_be.row = 14-m-n;
                                 white_must_be.column = n;
                             }
-                            return;
-                        }
+                            //return;
+                        }*/
                     c = 0;
                 } else if (p_ == -2) {
                     int h = 0;
@@ -1074,6 +1093,7 @@ void multiplier(int player){
                         temp_board[14 - m - n][n] *= d;
                         g = 1;
                     }
+                    /*
                     if (c==4) {
                         if (player == 1) {
                             black_flag = 1;
@@ -1100,8 +1120,8 @@ void multiplier(int player){
                                 white_must_be.row = 14-m-n;
                                 white_must_be.column = n;
                             }
-                            return;
-                        }
+                            //return;
+                        }*/
                     d = 0;
                 }
             } k = n;
@@ -1114,11 +1134,9 @@ void multiplier(int player){
         }
     }
 }
-
 set<coordinate> converter()
 {
     set<coordinate> coordinates;
-    
     int i, j;
     float p=0.0;
     float q = 0.0;

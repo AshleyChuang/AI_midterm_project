@@ -35,6 +35,7 @@ public:
     MCTS *mcts;
 };
 
+
 Game::Game(){
     mcts = new MCTS();
     int i,j;
@@ -49,8 +50,6 @@ Game::Game(){
         for(j=0;j<Length;++j)
             chessboard[i][j] = BLANK;
 }
-
-
 void Game:: MakePoint( Point * pPoint, int iGameFlag )
 {
     if( iGameFlag )
@@ -81,8 +80,6 @@ void Game:: MakePoint( Point * pPoint, int iGameFlag )
         printf("The blackputer place at %d%c\n", pPoint->X, coy );
     }
 }
-
-
 void Game::playGame()
 {
     printf("\t\t\tPlease input the coordinate（ex:13H）\n\n\n");
@@ -133,17 +130,16 @@ void Game::playGame()
 
 void Game::AI(int* y, int* x)
 {
-//    for (int i=0; i<Length; i++) {
-//        for (int j=0; j<Length; j++) {
-//            printf("chess board [%d][%d] = %d\n", i, j, chessboard[i][j]);
-//        }
-//    }
+    //    for (int i=0; i<Length; i++) {
+    //        for (int j=0; j<Length; j++) {
+    //            printf("chess board [%d][%d] = %d\n", i, j, chessboard[i][j]);
+    //        }
+    //    }
     coordinate move = mcts->getBestAction(this->chessboard, BLACK, this->g_iPointLen);
     printf("return a coordinate\n");
     *y = move.column;
     *x = move.row;
 }
-
 void Game::draw() /* 画棋盘 */
 {
     int i,j;
@@ -173,7 +169,6 @@ void Game::draw() /* 画棋盘 */
     printf("         A  B  C  D  E  F  G  H  I  J  K  L  M  N  0   \n");
     
 }
-
 int Game::getWinner(int (*board)[Length],coordinate coor)
 {
     const int x = coor.row;
@@ -238,8 +233,8 @@ int Game::getWinner(int (*board)[Length],coordinate coor)
         return player;
     return 0;
 }
-
-int main() {
+int main()
+{
     char k;
     system("color E0");//设置颜色
     do{
@@ -253,5 +248,3 @@ int main() {
     
     return 0;
 }
-
-
