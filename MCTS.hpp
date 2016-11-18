@@ -588,8 +588,6 @@ void multiplier(int player){
                 }
             } k = j;
         }if (c != 0) {
-            int a = i;
-            int b = k - c - 1;
             temp_board[i][k - c] *= c;
             c = 0;
         } else if (d != 0) {
@@ -1173,7 +1171,7 @@ set<coordinate> converter()
                 
                 a.column = j;
                 
-                coordinates.insert(a);
+                //coordinates.insert(a);
             }
         }
     }
