@@ -56,8 +56,6 @@ void Game:: MakePoint( Point * pPoint, int iGameFlag )
     {
         char cor;
         printf("please place your coordinate\n ");
-        
-        
         while( scanf( "%c%d", cor, &pPoint->Y) )
         {
             pPoint->X = cor-65;
@@ -150,24 +148,20 @@ void Game::draw() /* 画棋盘 */
             if(chessboard[j][i]==BLACK) strcpy(p[j][i],"1\0");
             if(chessboard[j][i]==WHITE) strcpy(p[j][i],"2\0");
         }
-    
+
     printf("        00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 \n");
-    
     printf("       |--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|\n");
     
-    for(i=0,j=0;i<14;i++,j++){
-        
+    for(i=0,j=0;i<14;i++,j++)
+    {
         printf("      %c|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%c\n",j+65,p[i][0],p[i][1],p[i][2],p[i][3],p[i][4],p[i][5],p[i][6],p[i][7],p[i][8],p[i][9],p[i][10],p[i][11],p[i][12],p[i][13],p[i][14],j+65);
-        
         printf("       |--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|\n");
-        
     }
-    
     printf("      O|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|%2s|O\n",p[14][0],p[14][1],p[14][2],p[14][3],p[14][4],p[14][5],p[14][6],p[14][7],p[14][8],p[14][9],p[14][10],p[14][11],p[14][12],p[14][13],p[14][14]);
-    
     printf("       |--|--|--|--|--|--|--|--|--|--|--|--|--|--|--|\n");
     printf("        00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 \n");
 }
+
 int Game::getWinner(int (*board)[Length],coordinate coor)
 {
     const int x = coor.row;
